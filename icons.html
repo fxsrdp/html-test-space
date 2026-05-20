@@ -419,6 +419,44 @@ h3{font-weight:400;font-size:var(--fs-sm);letter-spacing:.12em;color:#666;text-t
 
 <p class="note"><span class="hl">//</span> 42 capability variants + 11 individual concept icons = 53 total · pure accent geometry <span class="hl">//</span> <a href="index.html" style="color:inherit">← test</a></p>
 
+<!-- ═══════ DOCUMENTATION ═══════ -->
+<div class="section-wrap" style="margin-top:4rem">
+<h2>How We Got Here</h2>
+
+<div class="row" style="grid-template-columns:1fr"><div>
+<h4>Method</h4>
+<p class="v">Single concept → basic geometry → 3 layers (::before / ::after / child nodes). Opacity carries meaning: .15 (faint structure) → .25 (visible) → .35 (active) → .5 (focal). Accent-only palette — no other colors.</p>
+</div></div>
+
+<div class="row" style="grid-template-columns:1fr"><div>
+<h4>Prototype Evolution</h4>
+<p class="v" style="margin-bottom:.25rem">v1 — Orange on cream (#fe5000 / #f7f6f4) · felixschreiber-site</p>
+<p class="v" style="margin-bottom:.25rem">v2 — Orange on dark (#fe5000 / #0a0a0c) · test early experiments</p>
+<p class="v">v3 — Cyan on dark (#00e5ff / #0a0a0c) · current, all 53 converted</p>
+</div></div>
+
+<div class="row" style="grid-template-columns:1fr"><div>
+<h4>Key Decisions</h4>
+<p class="v" style="margin-bottom:.25rem">— 72×72px circle base: matches icon grid on main site</p>
+<p class="v" style="margin-bottom:.25rem">— border-radius:50% + overflow:hidden: clean circle crop</p>
+<p class="v" style="margin-bottom:.25rem">— No images, no fonts, no JS: pure CSS geometry</p>
+<p class="v" style="margin-bottom:.25rem">— Custom HTML tags (n, c, l, d, a, s, p, etc.): semantic structure without div soup</p>
+<p class="v">— Conic/repeating gradients over SVG: smaller CSS, faster render</p>
+</div></div>
+
+<div class="row" style="grid-template-columns:1fr"><div>
+<h4>Failed Approach: PNG/SDXL Generation</h4>
+<p class="v" style="margin-bottom:.25rem">— 10 text-to-image tests across SD v1.5 + SDXL: zero geometric results</p>
+<p class="v" style="margin-bottom:.25rem">— Canny ControlNet pipeline: geometry partially preserved, colors lost</p>
+<p class="v">→ CSS is the correct production path for geometric icons</p>
+</div></div>
+
+<div class="row" style="grid-template-columns:1fr"><div>
+<h4>Source</h4>
+<p class="v"><a href="https://github.com/fxsrdp/felixschreiber-site" style="color:var(--c)">felixschreiber-site/test-cap-icons.html</a> — original orange/cream prototype</p>
+</div></div>
+</div>
+
 <script src="js/cursor.js"></script>
 </body>
 </html>
