@@ -18,15 +18,15 @@
   --c25:rgba(0,229,255,.25);
   --c35:rgba(0,229,255,.35);
   --c50:rgba(0,229,255,.5);
-  --bg1:#0a0a0c;
-  --bg2:#111115;
-  --bg3:#18181e;
+  --bg1:#f7f6f4;
+  --bg2:#ece8df;
+  --bg3:#e2ded6;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;background:var(--bg1)}
 body{
   font-family:system-ui,-apple-system,sans-serif;
-  color:#c8c8cc;
+  color:#2c2c2c;
   background:var(--bg1);
   line-height:1.8;
   font-weight:300;
@@ -59,22 +59,22 @@ section:first-of-type{padding-top:calc(5rem + 52px)}
 
 /* — hero — */
 .hero{text-align:center;padding:6rem 0 4rem}
-.hero h1{font-weight:200;letter-spacing:.1em;font-size:clamp(1.8rem,4vw,3rem);color:#f0f0f0}
+.hero h1{font-weight:200;letter-spacing:.1em;font-size:clamp(1.8rem,4vw,3rem);color:#1a1a1a}
 .hero h1 span{color:var(--c)}
 .hero .sub{color:#666;font-size:var(--fs-sm);letter-spacing:.12em;margin-top:.75rem}
 
 /* — sec header — */
 .sec-label{font-size:10px;color:var(--c);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.25rem;font-weight:400}
-.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#e0e0e0;margin-bottom:2rem}
+.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#1a1a1a;margin-bottom:2rem}
 .sec-title::after{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,var(--c),transparent);margin:.6rem 0 0}
-.sec-desc{color:#888;margin-bottom:2.5rem;max-width:600px}
+.sec-desc{color:#777;margin-bottom:2.5rem;max-width:600px}
 
 /* — icon grid — */
 .icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
 .icon-tile{
   display:flex;align-items:center;justify-content:center;
   padding:1.25rem;background:var(--bg2);border-radius:3px;
-  border:1px solid rgba(255,255,255,.04);
+  border:1px solid #e8e6e0;
   transition:border-color .2s;
 }
 .icon-tile:hover{border-color:var(--c25)}
@@ -106,7 +106,7 @@ section:first-of-type{padding-top:calc(5rem + 52px)}
   transition:border-color .3s;
 }
 .cursor-demo-area:hover{border-color:var(--c35)}
-.cursor-demo-area .hint{color:#666;font-size:var(--fs-sm);letter-spacing:.08em}
+.cursor-demo-area .hint{color:#777;font-size:var(--fs-sm);letter-spacing:.08em}
 .cursor-demo-area .glow{color:var(--c);font-weight:400}
 
 /* — metrics — */
@@ -126,13 +126,13 @@ a:hover{border-bottom-color:var(--c)}
   margin:2rem auto 0;
   text-decoration:none;border:none;
   color:#666;font-size:var(--fs-sm);letter-spacing:.1em;
-  border-top:1px solid rgba(255,255,255,.06);
+  border-top:1px solid #e8e6e0;
   transition:color .2s,border-color .2s;
 }
 .more-bar:hover{color:var(--c);border-color:var(--c25)}
 
 /* — footer — */
-.footer{text-align:center;padding:4rem 0;color:#444;font-size:var(--fs-sm);letter-spacing:.08em}
+.footer{text-align:center;padding:4rem 0;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
 
 /* ================================================
    CSS ICONS — cyan edition

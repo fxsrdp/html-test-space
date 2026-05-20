@@ -12,13 +12,13 @@
   --fs-base:clamp(.875rem,1.11vw,1.125rem);
   --fs-sm:calc(var(--fs-base)*.75);
   --c:#00e5ff;
-  --bg1:#0a0a0c;
-  --bg2:#111115;
+  --bg1:#f7f6f4;
+  --bg2:#ece8df;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:system-ui,-apple-system,sans-serif;
-  color:#c8c8cc;background:var(--bg1);
+  color:#2c2c2c;background:var(--bg1);
   line-height:1.8;font-weight:300;
   font-size:var(--fs-base);
   -webkit-font-smoothing:antialiased;
@@ -36,14 +36,14 @@ body{
 .hero .sub{color:#666;font-size:var(--fs-sm);letter-spacing:.1em;margin-top:.5rem}
 
 .pano-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:1100px;margin:0 auto;padding:0 1.5rem 3rem}
-.pano-card{background:var(--bg2);border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
+.pano-card{background:var(--bg2);border-radius:4px;overflow:hidden;border:1px solid #e8e6e0}
 .pano-card a-scene{width:100%!important;height:40vh!important;display:block!important}
 .pano-tag{padding:.75rem 1rem;color:#666;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
-.pano-tag strong{color:#c8c8cc;font-weight:400}
+.pano-tag strong{color:#2c2c2c;font-weight:400}
 
 .a-enter-vr,.a-orientation-modal{display:none!important}
 
-.footer{text-align:center;padding:3rem 0;color:#444;font-size:var(--fs-sm);letter-spacing:.08em}
+.footer{text-align:center;padding:3rem 0;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
 .footer a{color:var(--c);text-decoration:none;border-bottom:1px solid transparent}
 .footer a:hover{border-bottom-color:var(--c)}
 

@@ -13,12 +13,12 @@
   --fs-lg:clamp(1.25rem,2.5vw,1.75rem);
   --c:#00e5ff;--c08:rgba(0,229,255,.08);--c12:rgba(0,229,255,.12);
   --c18:rgba(0,229,255,.18);--c25:rgba(0,229,255,.25);--c35:rgba(0,229,255,.35);
-  --bg1:#0a0a0c;--bg2:#111115;--bg3:#18181e;
+  --bg1:#f7f6f4;--bg2:#ece8df;--bg3:#e2ded6;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:system-ui,-apple-system,sans-serif;
-  color:#c8c8cc;background:var(--bg1);
+  color:#2c2c2c;background:var(--bg1);
   line-height:1.8;font-weight:300;
   font-size:var(--fs-base);-webkit-font-smoothing:antialiased;
   padding-top:52px;
@@ -34,9 +34,9 @@ section{padding:4rem 0}
 .inner{max-width:860px;margin:0 auto;padding:0 1.5rem}
 
 .sec-label{font-size:10px;color:var(--c);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.25rem;font-weight:400}
-.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#e0e0e0;margin-bottom:1rem}
+.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#1a1a1a;margin-bottom:1rem}
 .sec-title::after{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,var(--c),transparent);margin:.6rem 0 0}
-.sec-desc{color:#888;margin-bottom:2rem;max-width:600px}
+.sec-desc{color:#777;margin-bottom:2rem;max-width:600px}
 
 .video-showcase{display:flex;gap:2rem;align-items:center;justify-content:center;flex-wrap:wrap;padding:3rem 0}
 .video-circle{border-radius:50%;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%)}
@@ -46,19 +46,19 @@ section{padding:4rem 0}
 .vid-sm{width:72px;height:72px}
 
 .spec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:2rem 0}
-.spec-card{background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-radius:4px;padding:1.25rem}
+.spec-card{background:var(--bg2);border:1px solid #e8e6e0;border-radius:4px;padding:1.25rem}
 .spec-card .label{font-size:10px;color:var(--c);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3rem}
-.spec-card .value{color:#e0e0e0;font-weight:300}
+.spec-card .value{color:#1a1a1a;font-weight:300}
 
-.doc-row{background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-radius:4px;padding:1.25rem;margin-bottom:.75rem}
-.doc-row h4{font-weight:400;font-size:var(--fs-sm);color:#e0e0e0;margin-bottom:.3rem}
-.doc-row .v{color:#888;font-size:11px;letter-spacing:.06em;line-height:1.6}
+.doc-row{background:var(--bg2);border:1px solid #e8e6e0;border-radius:4px;padding:1.25rem;margin-bottom:.75rem}
+.doc-row h4{font-weight:400;font-size:var(--fs-sm);color:#1a1a1a;margin-bottom:.3rem}
+.doc-row .v{color:#666;font-size:11px;letter-spacing:.06em;line-height:1.6}
 .doc-row .v a{color:var(--c)}
 
 code{background:var(--bg3);padding:.15em .4em;border-radius:2px;font-size:.9em;color:var(--c)}
 .fail{color:#e05555}
 
-.footer{text-align:center;padding:3rem 0;color:#444;font-size:var(--fs-sm);letter-spacing:.08em}
+.footer{text-align:center;padding:3rem 0;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
 
 @media(max-width:768px){
   .nav{padding:0 1rem}
@@ -75,6 +75,7 @@ code{background:var(--bg3);padding:.15em .4em;border-radius:2px;font-size:.9em;c
 <a href="index.html" class="nav-back">← <span>TEST</span></a>
 <a href="icons.html">Icons</a>
 <a href="cursor.html">Cursor</a>
+<a href="panos.html">Panos</a>
 </nav>
 
 <!-- ═══════ RESULT ═══════ -->
