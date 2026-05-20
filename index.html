@@ -119,6 +119,18 @@ section:first-of-type{padding-top:calc(5rem + 52px)}
 a{color:var(--c);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
 a:hover{border-bottom-color:var(--c)}
 
+/* — more bar (subpage link) — */
+.more-bar{
+  display:flex;align-items:center;
+  width:33vw;height:5vh;
+  margin:2rem auto 0;
+  text-decoration:none;border:none;
+  color:#666;font-size:var(--fs-sm);letter-spacing:.1em;
+  border-top:1px solid rgba(255,255,255,.06);
+  transition:color .2s,border-color .2s;
+}
+.more-bar:hover{color:var(--c);border-color:var(--c25)}
+
 /* — footer — */
 .footer{text-align:center;padding:4rem 0;color:#444;font-size:var(--fs-sm);letter-spacing:.08em}
 
@@ -222,8 +234,6 @@ a:hover{border-bottom-color:var(--c)}
 <li><a href="#icons">Icons</a></li>
 <li><a href="#video">Video</a></li>
 <li><a href="#cursor">Cursor</a></li>
-<li><a href="icons.html">All 53</a></li>
-<li><a href="panos.html">Panos</a></li>
 </ul>
 </nav>
 
@@ -254,9 +264,10 @@ a:hover{border-bottom-color:var(--c)}
 <div class="icon-tile"><div class="icon ai5"><w></w><w></w><w></w></div></div>
 <div class="icon-tile"><div class="icon ds1"><p></p><p></p><c></c></div></div>
 <div class="icon-tile"><div class="icon ds6"><p></p><p></p></div></div>
-<div class="icon-tile"><div class="icon rxll"><l></l><l></l><s></s></div></div>
+  <div class="icon-tile"><div class="icon rxll"><l></l><l></l><s></s></div></div>
 </div>
 </div>
+<a href="icons.html" class="more-bar">(more)</a>
 </section>
 
 <!-- ═══════ VIDEO CIRCLE ═══════ -->
@@ -278,6 +289,7 @@ a:hover{border-bottom-color:var(--c)}
 <div class="metric"><div class="num">2.3</div><div class="label">MB · H.265</div></div>
 </div>
 </div>
+<a href="video.html" class="more-bar">(more)</a>
 </section>
 
 <!-- ═══════ CUSTOM CURSOR ═══════ -->
@@ -297,6 +309,15 @@ a:hover{border-bottom-color:var(--c)}
 <div class="metric"><div class="num">N-body</div><div class="label">simulation</div></div>
 <div class="metric"><div class="num">&lt;1 KB</div><div class="label">gzipped JS</div></div>
 </div>
+</div>
+<a href="cursor.html" class="more-bar">(more)</a>
+</section>
+
+<!-- ═══════ ALSO ═══════ -->
+<section style="padding:3rem 0">
+<div class="inner" style="text-align:center">
+<div class="sec-label">view</div>
+<a href="panos.html" class="more-bar" style="width:auto;margin:0 auto">(panoramas)</a>
 </div>
 </section>
 
