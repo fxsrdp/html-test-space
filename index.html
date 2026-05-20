@@ -3,21 +3,273 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>HTML TEST SPACE</title>
+<title>HTML TEST SPACE · felix schreiber</title>
+<link rel="stylesheet" href="css/cursor.css">
 <style>
+:root{
+  --fs-base:clamp(.875rem,1.11vw,1.125rem);
+  --fs-sm:calc(var(--fs-base)*.75);
+  --fs-lg:clamp(1.25rem,2.5vw,1.75rem);
+  --c:#00e5ff;
+  --c08:rgba(0,229,255,.08);
+  --c12:rgba(0,229,255,.12);
+  --c18:rgba(0,229,255,.18);
+  --c25:rgba(0,229,255,.25);
+  --c35:rgba(0,229,255,.35);
+  --c50:rgba(0,229,255,.5);
+  --bg1:#0a0a0c;
+  --bg2:#111115;
+  --bg3:#18181e;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg1)}
 body{
   font-family:system-ui,-apple-system,sans-serif;
-  background:#0d0d0d;
-  color:#e0e0e0;
-  min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
+  color:#c8c8cc;
+  background:var(--bg1);
+  line-height:1.8;
+  font-weight:300;
+  font-size:var(--fs-base);
+  -webkit-font-smoothing:antialiased;
 }
-h1{font-weight:200;letter-spacing:.08em;font-size:clamp(1.5rem,3vw,3rem)}
-span{color:#fe5000}
+
+section{padding:5rem 0}
+.inner{max-width:860px;margin:0 auto;padding:0 1.5rem}
+
+/* — hero — */
+.hero{text-align:center;padding:6rem 0 4rem}
+.hero h1{font-weight:200;letter-spacing:.1em;font-size:clamp(1.8rem,4vw,3rem);color:#f0f0f0}
+.hero h1 span{color:var(--c)}
+.hero .sub{color:#666;font-size:var(--fs-sm);letter-spacing:.12em;margin-top:.75rem}
+
+/* — sec header — */
+.sec-label{font-size:10px;color:var(--c);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.25rem;font-weight:400}
+.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#e0e0e0;margin-bottom:2rem}
+.sec-title::after{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,var(--c),transparent);margin:.6rem 0 0}
+.sec-desc{color:#888;margin-bottom:2.5rem;max-width:600px}
+
+/* — icon grid — */
+.icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+.icon-tile{
+  display:flex;align-items:center;justify-content:center;
+  padding:1.25rem;background:var(--bg2);border-radius:3px;
+  border:1px solid rgba(255,255,255,.04);
+  transition:border-color .2s;
+}
+.icon-tile:hover{border-color:var(--c25)}
+
+/* icon base — 72px circle */
+.icon{
+  width:72px;height:72px;
+  border-radius:50%;position:relative;overflow:hidden;
+  flex-shrink:0;
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
+}
+
+/* — video circle — */
+.video-showcase{display:flex;gap:2rem;align-items:center;justify-content:center;flex-wrap:wrap;padding:2rem 0}
+.video-circle{
+  border-radius:50%;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
+}
+.video-circle video{width:100%;height:100%;object-fit:cover;display:block}
+.vid-sm{width:72px;height:72px}
+.vid-md{width:120px;height:120px}
+.vid-lg{width:200px;height:200px}
+
+/* — cursor demo — */
+.cursor-demo-area{
+  padding:3rem 2rem;background:var(--bg2);border-radius:6px;
+  border:1px dashed var(--c18);
+  text-align:center;
+  transition:border-color .3s;
+}
+.cursor-demo-area:hover{border-color:var(--c35)}
+.cursor-demo-area .hint{color:#666;font-size:var(--fs-sm);letter-spacing:.08em}
+.cursor-demo-area .glow{color:var(--c);font-weight:400}
+
+/* — metrics — */
+.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2rem 0}
+.metric{text-align:center}
+.metric .num{font-size:2rem;font-weight:200;color:var(--c);letter-spacing:.04em}
+.metric .label{font-size:10px;color:#666;letter-spacing:.12em;text-transform:uppercase;margin-top:.25rem}
+
+/* — links — */
+a{color:var(--c);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
+a:hover{border-bottom-color:var(--c)}
+
+/* — footer — */
+.footer{text-align:center;padding:4rem 0;color:#444;font-size:var(--fs-sm);letter-spacing:.08em}
+
+/* ================================================
+   CSS ICONS — cyan edition
+   Same geometry, cyan palette
+   ================================================ */
+
+/* fea1 — Stress Cone */
+.fe1::before{content:'';position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 30deg,transparent 0deg,var(--c12) 40deg,transparent 80deg,var(--c18) 120deg,transparent 160deg,var(--c12) 200deg,transparent 240deg,var(--c08) 280deg,transparent 320deg,var(--c12) 360deg)}
+.fe1::after{content:'';position:absolute;top:14px;left:14px;right:14px;bottom:14px;border-radius:50%;border:1.5px solid var(--c35);box-shadow:0 0 0 4px rgba(0,229,255,.04),0 0 0 10px rgba(0,229,255,.03)}
+.fe1 n{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--c);opacity:.5}
+.fe1 n.t{top:14px;left:50%;transform:translateX(-50%)}.fe1 n.r{top:50%;right:14px;transform:translateY(-50%)}
+.fe1 n.b{bottom:14px;left:50%;transform:translateX(-50%)}.fe1 n.l{top:50%;left:14px;transform:translateY(-50%)}
+
+/* fea3 — Force Convergence */
+.fe3::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--c25)}
+.fe3::after{content:'';position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--c);opacity:.5;transform:translate(-50%,-50%)}
+.fe3 a{position:absolute;width:2px;height:14px;background:var(--c);opacity:.35;top:50%;left:50%;transform-origin:center center}
+.fe3 a:nth-child(1){transform:translate(-50%,-50%) rotate(0deg) translateY(-16px)}.fe3 a:nth-child(2){transform:translate(-50%,-50%) rotate(60deg) translateY(-16px)}.fe3 a:nth-child(3){transform:translate(-50%,-50%) rotate(120deg) translateY(-16px)}.fe3 a:nth-child(4){transform:translate(-50%,-50%) rotate(180deg) translateY(-16px)}.fe3 a:nth-child(5){transform:translate(-50%,-50%) rotate(240deg) translateY(-16px)}.fe3 a:nth-child(6){transform:translate(-50%,-50%) rotate(300deg) translateY(-16px)}
+
+/* fea6 — Fracture Analysis */
+.fe6::before{content:'';position:absolute;top:14px;left:50%;width:2px;height:18px;background:var(--c35);transform:translateX(-50%)}
+.fe6::after{content:'';position:absolute;top:30px;left:28px;width:16px;height:2px;background:var(--c25)}
+.fe6 z{position:absolute;width:2px;height:8px;background:var(--c);border-radius:1px}
+.fe6 z:nth-child(1){top:22px;left:44px;opacity:.4;transform:rotate(-30deg)}.fe6 z:nth-child(2){top:28px;left:48px;opacity:.25;transform:rotate(20deg);height:6px}.fe6 z:nth-child(3){top:34px;left:22px;opacity:.3;transform:rotate(-15deg)}
+.fe6 f{position:absolute;top:14px;left:50%;width:6px;height:6px;border-radius:50%;background:var(--c);opacity:.5;transform:translateX(-50%)}
+
+/* am1 — Layered Radial */
+.am1::before{content:'';position:absolute;inset:12px;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,transparent,transparent 3px,var(--c12) 3px,var(--c12) 4px)}
+.am1::after{content:'';position:absolute;top:18px;left:18px;right:18px;bottom:18px;border-radius:50%;border:1.5px solid var(--c25)}
+.am1 l{position:absolute;left:50%;transform:translateX(-50%);border-radius:2px;background:var(--c)}
+.am1 l:nth-child(1){top:10px;width:2px;height:12px;opacity:.25}.am1 l:nth-child(2){top:28px;width:3px;height:16px;opacity:.4}.am1 l:nth-child(3){bottom:10px;width:2px;height:10px;opacity:.2}
+
+/* am6 — Honeycomb Infill */
+.am6::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(60deg,var(--c12) 0px,var(--c12) 1px,transparent 1px,transparent 8px),repeating-linear-gradient(-60deg,var(--c12) 0px,var(--c12) 1px,transparent 1px,transparent 8px),repeating-linear-gradient(0deg,var(--c08) 0px,var(--c08) 1px,transparent 1px,transparent 8px);mask:radial-gradient(circle,black 55%,transparent 58%);-webkit-mask:radial-gradient(circle,black 55%,transparent 58%)}
+.am6::after{content:'';position:absolute;inset:14px;border-radius:50%;border:1.5px solid var(--c25)}
+
+/* mac1 — App Window */
+.mc1::before{content:'';position:absolute;top:14px;left:12px;right:12px;bottom:14px;border-radius:6px;background:var(--c08);border:1.5px solid rgba(0,229,255,.2)}
+.mc1::after{content:'';position:absolute;top:19px;left:18px;width:6px;height:6px;border-radius:50%;background:var(--c35);box-shadow:12px 0 0 var(--c12),24px 0 0 var(--c12)}
+.mc1 c{position:absolute;left:19px;right:6px;height:3px;border-radius:2px;background:var(--c18)}
+.mc1 c:nth-child(1){top:31px;right:16px}.mc1 c:nth-child(2){top:39px;right:18px;width:8px}
+
+/* ci1 — Pipeline Ring */
+.ci1::before{content:'';position:absolute;inset:8px;border-radius:50%;border:2px dashed var(--c18)}
+.ci1::after{content:'';position:absolute;inset:18px;border-radius:50%;border:1.5px solid var(--c25)}
+.ci1 a{position:absolute;width:3px;height:8px;background:var(--c);opacity:.4}
+.ci1 a:nth-child(1){top:8px;left:50%;transform:translateX(-50%)}
+.ci1 a:nth-child(2){top:8px;right:10px;transform:rotate(120deg)}
+
+/* ai2 — Neural Mesh */
+.ai2::before{content:'';position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--c18) 0%,transparent 40%),radial-gradient(circle at 70% 35%,var(--c12) 0%,transparent 30%),radial-gradient(circle at 25% 70%,var(--c25) 0%,transparent 35%),radial-gradient(circle at 65% 65%,var(--c12) 0%,transparent 25%),radial-gradient(circle at 50% 50%,var(--c35) 0%,transparent 20%),radial-gradient(circle at 15% 45%,var(--c08) 0%,transparent 20%),radial-gradient(circle at 80% 50%,var(--c08) 0%,transparent 15%),radial-gradient(circle at 45% 75%,var(--c12) 0%,transparent 18%)}
+.ai2::after{content:'';position:absolute;inset:16px;border-radius:50%;border:1.5px solid var(--c18)}
+
+/* ai5 — Weight Matrix */
+.ai5::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,var(--c08) 0px,var(--c08) 1px,transparent 1px,transparent 10px),repeating-linear-gradient(90deg,var(--c08) 0px,var(--c08) 1px,transparent 1px,transparent 10px);mask:radial-gradient(circle,black 55%,transparent 58%);-webkit-mask:radial-gradient(circle,black 55%,transparent 58%)}
+.ai5 w{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);opacity:.5}
+.ai5 w:nth-child(1){top:24px;left:24px}
+.ai5 w:nth-child(2){top:24px;right:28px}
+.ai5 w:nth-child(3){bottom:28px;left:32px}
+
+/* ds1 — Direction Compass */
+.ds1::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--c25)}
+.ds1 p{position:absolute;top:50%;left:50%;width:2px;height:20px;background:var(--c);opacity:.5;transform:translate(-50%,-50%)}
+.ds1 p:last-child{width:20px;height:2px}
+.ds1 c{position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;background:var(--c);opacity:.7;transform:translate(-50%,-50%)}
+
+/* ds6 — Growth Spiral */
+.ds6::before{content:'';position:absolute;inset:10px;border-radius:50%;background:conic-gradient(from 0deg,var(--c08) 0deg,var(--c12) 60deg,var(--c18) 120deg,var(--c25) 180deg,var(--c35) 240deg,var(--c18) 300deg,var(--c08) 360deg)}
+.ds6::after{content:'';position:absolute;inset:18px;border-radius:50%;border:1.5px solid var(--c25)}
+.ds6 p{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);opacity:.6}
+.ds6 p:nth-child(1){top:18px;left:28px}
+.ds6 p:nth-child(2){bottom:20px;right:26px}
+
+/* rx-ll — Local LLM */
+.rxll::before{content:'';position:absolute;top:16px;left:18px;right:18px;bottom:20px;border:1.5px solid var(--c25);border-radius:3px}
+.rxll::after{content:'';position:absolute;top:22px;left:24px;width:8px;height:8px;border-radius:2px;background:var(--c35)}
+.rxll l{position:absolute;bottom:16px;left:22px;right:22px;height:2px;border-radius:1px;background:var(--c18)}
+.rxll l:nth-child(2){bottom:18px;height:2px}
+.rxll s{position:absolute;top:24px;right:20px;width:16px;height:9px;border:1.5px solid var(--c18);border-radius:0 0 3px 3px;border-top:none}
+
+@media(max-width:768px){
+  .icon-grid{grid-template-columns:repeat(2,1fr)}
+  .video-showcase{gap:1rem}
+  .metric-row{grid-template-columns:1fr;gap:1rem}
+}
 </style>
 </head>
 <body>
+
+<!-- cursor element -->
+<div id="cur"><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div></div>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero">
 <h1>HTML <span>TEST</span> SPACE</h1>
+<p class="sub">prototypes · demos · experiments</p>
+</section>
+
+<!-- ═══════ CSS ICONS ═══════ -->
+<section id="icons">
+<div class="inner">
+<div class="sec-label">prototypes</div>
+<h2 class="sec-title">CSS Capability Icons</h2>
+<p class="sec-desc">53 pure-CSS circular icons. Zero images, zero fonts, zero external assets. Single concept → basic geometry → 3 layers (::before / ::after / child nodes). Accent-only palette — no other colors.</p>
+
+<div class="icon-grid">
+<div class="icon-tile"><div class="icon fe1"><n class="t"></n><n class="r"></n><n class="b"></n><n class="l"></n></div></div>
+<div class="icon-tile"><div class="icon fe3"><a></a><a></a><a></a><a></a><a></a><a></a></div></div>
+<div class="icon-tile"><div class="icon fe6"><z></z><z></z><z></z><f></f></div></div>
+<div class="icon-tile"><div class="icon am1"><l></l><l></l><l></l></div></div>
+
+<div class="icon-tile"><div class="icon am6"></div></div>
+<div class="icon-tile"><div class="icon mc1"><c></c><c></c></div></div>
+<div class="icon-tile"><div class="icon ci1"><a></a><a></a></div></div>
+<div class="icon-tile"><div class="icon ai2"></div></div>
+
+<div class="icon-tile"><div class="icon ai5"><w></w><w></w><w></w></div></div>
+<div class="icon-tile"><div class="icon ds1"><p></p><p></p><c></c></div></div>
+<div class="icon-tile"><div class="icon ds6"><p></p><p></p></div></div>
+<div class="icon-tile"><div class="icon rxll"><l></l><l></l><s></s></div></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════ VIDEO CIRCLE ═══════ -->
+<section id="video" style="background:var(--bg2)">
+<div class="inner">
+<div class="sec-label">demo</div>
+<h2 class="sec-title">Video Circle</h2>
+<p class="sec-desc">Timeline 1.mp4 — 1000×1000 H.265 16fps 30s loop. Rendered as a circular web object via <code>border-radius:50%</code> + <code>object-fit:cover</code>. No JS, no canvas, no transcode.</p>
+
+<div class="video-showcase" data-drag="true">
+<div class="video-circle vid-sm"><video src="images/timeline_1.mp4" autoplay loop muted playsinline></video></div>
+<div class="video-circle vid-md"><video src="images/timeline_1.mp4" autoplay loop muted playsinline></video></div>
+<div class="video-circle vid-lg"><video src="images/timeline_1.mp4" autoplay loop muted playsinline></video></div>
+</div>
+
+<div class="metric-row" style="margin-top:2rem">
+<div class="metric"><div class="num">30s</div><div class="label">loop duration</div></div>
+<div class="metric"><div class="num">16</div><div class="label">frames / sec</div></div>
+<div class="metric"><div class="num">2.3</div><div class="label">MB · H.265</div></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════ CUSTOM CURSOR ═══════ -->
+<section id="cursor">
+<div class="inner">
+<div class="sec-label">interaction</div>
+<h2 class="sec-title">Custom Proximity Cursor</h2>
+<p class="sec-desc">A cursor that reacts to interactive elements. <span class="glow">Hovers</span> over links — <span class="glow">splits into 3 dots</span> over draggable zones with N-body physics. Pure CSS + vanilla JS, no dependencies.</p>
+
+<div class="cursor-demo-area" data-drag="true">
+<p class="hint">← drag across here to see the <span class="glow">cursor split</span> with physics</p>
+<p class="hint" style="margin-top:1rem"><a href="#icons">hover links</a> — <a href="#video">proximity glow</a> — <a href="#cursor">edge detection</a></p>
+</div>
+
+<div class="metric-row" style="margin-top:2rem">
+<div class="metric"><div class="num">3</div><div class="label">physics dots</div></div>
+<div class="metric"><div class="num">N-body</div><div class="label">simulation</div></div>
+<div class="metric"><div class="num">&lt;1 KB</div><div class="label">gzipped JS</div></div>
+</div>
+</div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<div class="footer">
+<a href="https://github.com/fxsrdp/html-test-space">fxsrdp/html-test-space</a> · felix schreiber · 2026
+</div>
+
+<script src="js/cursor.js"></script>
 </body>
 </html>
