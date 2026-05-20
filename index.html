@@ -33,7 +33,27 @@ body{
   -webkit-font-smoothing:antialiased;
 }
 
+/* — navbar — */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:#fff;
+  border-bottom:1px solid #e8e8ec;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 2rem;height:52px;
+  font-size:var(--fs-sm);
+}
+.nav-logo{font-weight:500;color:#1a1a1a;letter-spacing:.06em;text-decoration:none;border:none}
+.nav-logo span{color:var(--c);font-weight:300}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{
+  color:#888;text-decoration:none;border:none;
+  letter-spacing:.06em;transition:color .2s;
+  font-weight:350;
+}
+.nav-links a:hover{color:#1a1a1a}
+
 section{padding:5rem 0}
+section:first-of-type{padding-top:calc(5rem + 52px)}
 .inner{max-width:860px;margin:0 auto;padding:0 1.5rem}
 
 /* — hero — */
@@ -181,6 +201,8 @@ a:hover{border-bottom-color:var(--c)}
 .rxll s{position:absolute;top:24px;right:20px;width:16px;height:9px;border:1.5px solid var(--c18);border-radius:0 0 3px 3px;border-top:none}
 
 @media(max-width:768px){
+  .nav{padding:0 1rem}
+  .nav-links{gap:.75rem;font-size:11px}
   .icon-grid{grid-template-columns:repeat(2,1fr)}
   .video-showcase{gap:1rem}
   .metric-row{grid-template-columns:1fr;gap:1rem}
@@ -191,6 +213,16 @@ a:hover{border-bottom-color:var(--c)}
 
 <!-- cursor element -->
 <div id="cur"><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div></div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav class="nav">
+<a href="#" class="nav-logo">HTML <span>TEST</span> SPACE</a>
+<ul class="nav-links">
+<li><a href="#icons">Icons</a></li>
+<li><a href="#video">Video</a></li>
+<li><a href="#cursor">Cursor</a></li>
+</ul>
+</nav>
 
 <!-- ═══════ HERO ═══════ -->
 <section class="hero">
