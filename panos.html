@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>panoramas · HTML TEST SPACE</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%2300e5ff'/></svg>">
+<link rel="stylesheet" href="css/cursor.css">
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<style>
+:root{
+  --fs-base:clamp(.875rem,1.11vw,1.125rem);
+  --fs-sm:calc(var(--fs-base)*.75);
+  --c:#00e5ff;
+  --bg1:#0a0a0c;
+  --bg2:#111115;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  color:#c8c8cc;background:var(--bg1);
+  line-height:1.8;font-weight:300;
+  font-size:var(--fs-base);
+  -webkit-font-smoothing:antialiased;
+}
+
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff;border-bottom:1px solid #e8e8ec;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;font-size:var(--fs-sm)}
+.nav a{color:#888;text-decoration:none;border:none;letter-spacing:.06em;transition:color .2s}
+.nav a:hover{color:#1a1a1a}
+.nav-back{font-weight:500;color:#1a1a1a!important}
+.nav-back span{color:var(--c);font-weight:300}
+
+.hero{padding:calc(5rem + 52px) 2rem 2rem;text-align:center}
+.hero h1{font-weight:200;letter-spacing:.08em;font-size:clamp(1.5rem,3vw,2.5rem);color:#f0f0f0}
+.hero h1 span{color:var(--c)}
+.hero .sub{color:#666;font-size:var(--fs-sm);letter-spacing:.1em;margin-top:.5rem}
+
+.pano-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:1100px;margin:0 auto;padding:0 1.5rem 3rem}
+.pano-card{background:var(--bg2);border-radius:4px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
+.pano-card a-scene{width:100%!important;height:40vh!important;display:block!important}
+.pano-tag{padding:.75rem 1rem;color:#666;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.pano-tag strong{color:#c8c8cc;font-weight:400}
+
+.a-enter-vr,.a-orientation-modal{display:none!important}
+
+.footer{text-align:center;padding:3rem 0;color:#444;font-size:var(--fs-sm);letter-spacing:.08em}
+.footer a{color:var(--c);text-decoration:none;border-bottom:1px solid transparent}
+.footer a:hover{border-bottom-color:var(--c)}
+
+@media(max-width:768px){
+  .nav{padding:0 1rem}
+  .pano-grid{grid-template-columns:1fr}
+  .pano-card a-scene{height:35vh!important}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div></div>
+
+<nav class="nav">
+<a href="index.html" class="nav-back">← <span>TEST</span></a>
+<a href="index.html">Home</a>
+<a href="icons.html">Icons</a>
+</nav>
+
+<div class="hero">
+<h1><span>360°</span> Panoramas</h1>
+<p class="sub">immersive spherical documentation · drag to explore</p>
+</div>
+
+<div class="pano-grid">
+<div class="pano-card" data-drag="true">
+<a-scene embedded>
+  <a-camera wasd-controls-enabled="false" look-controls-enabled="true" position="0 0 0"></a-camera>
+  <a-sky src="images/spk-pano-gmaps3-hires-scaled.jpg" rotation="0 45 0"></a-sky>
+</a-scene>
+<div class="pano-tag"><strong>Schattenzensus</strong> gmaps3</div>
+</div>
+
+<div class="pano-card" data-drag="true">
+<a-scene embedded>
+  <a-camera wasd-controls-enabled="false" look-controls-enabled="true" position="0 0 0"></a-camera>
+  <a-sky src="images/spk-pano-gmaps5-hires-scaled.jpg" rotation="0 60 0"></a-sky>
+</a-scene>
+<div class="pano-tag"><strong>Schattenzensus</strong> gmaps5</div>
+</div>
+</div>
+
+<div class="footer">
+<a href="index.html">← back to test</a>
+</div>
+
+<script src="js/cursor.js"></script>
+</body>
+</html>
