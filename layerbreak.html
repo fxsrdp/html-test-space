@@ -191,7 +191,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   <div class="sec-title" style="font-size:1rem">Render Decomposition</div>
   <div class="stack-wrap" id="stack">
     <img class="stack-main" src="img/layerbreak/render_base.png" alt="Base render">
-    <img class="stack-overlay" id="ol-depth" src="img/layerbreak/depth_full.png" alt="Depth">
+    <img class="stack-overlay" id="ol-depth" src="img/layerbreak/depth_scene.png" alt="Depth">
     <img class="stack-overlay normal-mode" id="ol-normals" src="img/layerbreak/normals.png" alt="Normals">
     <img class="stack-overlay normal-mode" id="ol-objects" src="img/layerbreak/objects.png" alt="Object IDs">
   </div>
@@ -222,7 +222,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
 <section style="margin-bottom:2rem">
   <div class="sec-title" style="font-size:1rem">Depth → Image Magazine Scenes</div>
   <div class="sec-desc" style="font-size:var(--fs-sm)">
-    Full-scene depth map (1024×1024, 128 samples, Cycles) drives ControlNet Depth SDXL to generate 3 editorial scenes while preserving 3D geometry from the original Blender composition.
+    Full-scene depth map (1024×512, 2:1 aspect, 128 samples Cycles) drives ControlNet Depth SDXL to generate 3 editorial scenes while preserving 3D geometry from the original Blender composition.<br><small style="color:#999">(SDXL KSampler latent at 1024×1024 — ControlNet internally maps the 2:1 depth to the square latent space)</small>
   </div>
   <div class="gen-grid">
     <div class="gen-card">
@@ -265,7 +265,9 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
     <span class="arr">&rarr;</span>
     <span class="step">KSampler · dpmpp_2m · CFG 7.0 · 25 steps</span>
     <span class="arr">&rarr;</span>
-    <span class="step">1024×1024 Output</span>
+    <span class="step">1024×1024 Output (latent)</span>
+    <span class="arr">&rarr;</span>
+    <span class="step">2:1 Depth → square latent mapping</span>
   </div>
 </section>
 
