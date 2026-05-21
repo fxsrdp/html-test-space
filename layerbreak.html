@@ -37,15 +37,16 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   width:100%;
   display:block;
   aspect-ratio:2/1;
-  object-fit:contain;
+  object-fit:cover;
   background:var(--bg2);
+  transition:opacity .4s;
 }
 .stack-overlay{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
-  object-fit:contain;
+  object-fit:fill;
   mix-blend-mode:screen;
   opacity:0;
   transition:opacity .3s;
@@ -53,6 +54,20 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
 }
 .stack-overlay.normal-mode{mix-blend-mode:overlay}
 .stack-overlay.on{opacity:1}
+.stack-label{
+  position:absolute;
+  bottom:.5rem;
+  right:.75rem;
+  font-size:10px;
+  letter-spacing:.08em;
+  color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.5);
+  opacity:0;
+  transition:opacity .3s;
+  pointer-events:none;
+  z-index:2;
+}
+.stack-label.on{opacity:1}
 
 /* ═══════ LAYER CONTROLS ═══════ */
 .controls{
@@ -149,14 +164,14 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   letter-spacing:.04em;
   color:#666;
 }
-.pipeline .step{
+.step,.pipeline .step{
   padding:.35rem .7rem;
   border:1px solid var(--c18);
   border-radius:4px;
   color:var(--c);
   white-space:nowrap;
 }
-.pipeline .arr{color:#aaa}
+.arr,.pipeline .arr{color:#aaa}
 
 .footer{text-align:center;padding:3rem 0;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
 
@@ -194,6 +209,9 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
     <img class="stack-overlay" id="ol-depth" src="img/layerbreak/depth_scene.png" alt="Depth">
     <img class="stack-overlay normal-mode" id="ol-normals" src="img/layerbreak/normals.png" alt="Normals">
     <img class="stack-overlay normal-mode" id="ol-objects" src="img/layerbreak/objects.png" alt="Object IDs">
+    <div class="stack-label" id="lb-depth" style="mix-blend-mode:normal">Depth Map</div>
+    <div class="stack-label" id="lb-normals" style="mix-blend-mode:normal">Normals</div>
+    <div class="stack-label" id="lb-objects" style="mix-blend-mode:normal">Object IDs</div>
   </div>
 
   <div class="controls" id="layer-controls">
@@ -218,11 +236,14 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   </div>
 </section>
 
-<!-- ═══════ GENERATED SCENES ═══════ -->
+<!-- ═══════ FLOW CONNECTOR + GENERATED SCENES ═══════ -->
 <section style="margin-bottom:2rem">
-  <div class="sec-title" style="font-size:1rem">Depth → Image Magazine Scenes</div>
-  <div class="sec-desc" style="font-size:var(--fs-sm)">
-    Full-scene depth map (1024×512, 2:1 aspect, 128 samples Cycles) drives ControlNet Depth SDXL to generate 3 editorial scenes while preserving 3D geometry from the original Blender composition.<br><small style="color:#999">(SDXL KSampler latent at 1024×1024 — ControlNet internally maps the 2:1 depth to the square latent space)</small>
+  <div style="display:flex;align-items:center;gap:.5rem;justify-content:center;margin-bottom:2rem;font-size:11px;letter-spacing:.06em;color:#aaa">
+    <span class="step" style="border-color:var(--c25)">Depth Map</span>
+    <span class="arr">&rarr;</span>
+    <span class="step" style="border-color:var(--c25)">ControlNet Depth SDXL</span>
+    <span class="arr">&rarr;</span>
+    <span class="step" style="border-color:var(--c25)">Editorial Output</span>
   </div>
   <div class="gen-grid">
     <div class="gen-card">
@@ -249,28 +270,6 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   </div>
 </section>
 
-<!-- ═══════ PIPELINE ═══════ -->
-<section style="margin-bottom:2rem">
-  <div class="sec-title" style="font-size:1rem">Pipeline</div>
-  <div class="pipeline" style="margin-bottom:1rem">
-    <span class="step">Blender 5.1 · Cycles 128s</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">Z-Pass + Normalize + Invert</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">EXR → 16-bit PNG</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">ComfyUI /upload/image</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">ControlNet Depth SDXL · 0.85</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">KSampler · dpmpp_2m · CFG 7.0 · 25 steps</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">1024×1024 Output (latent)</span>
-    <span class="arr">&rarr;</span>
-    <span class="step">2:1 Depth → square latent mapping</span>
-  </div>
-</section>
-
 <!-- ═══════ TECHNIQUE ═══════ -->
 <section style="margin-bottom:2rem">
   <div class="sec-title" style="font-size:1rem">Technique</div>
@@ -287,6 +286,10 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   <div class="doc-row">
     <h4>Depth Map Extraction</h4>
     <div class="v">Blender 5.1 compositor: Z-Pass → Normalize node → Invert → FileOutput (OPEN_EXR_MULTILAYER). EXR converted to 16-bit PNG via OpenEXR + Pillow. Scene had FFMPEG animation format — output bypassed via FileOutput compositor node (scene-level format override not possible in Blender 5.1).</div>
+  </div>
+  <div class="doc-row">
+    <h4>Full Pipeline</h4>
+    <div class="v">Blender 5.1 · Cycles 128 samples → Z-Pass → Normalize → Invert → FileOutput (EXR) → OpenEXR+Pillow → 16-bit PNG → ComfyUI /upload/image → ControlNet Depth SDXL · 0.85 → KSampler (dpmpp_2m, karras, CFG 7.0, 25 steps) → 1024×1024 latent output. MPS generation: ~2.5 min each. 2:1 depth map mapped to SDXL square latent space by ControlNet internally.</div>
   </div>
   <div class="doc-grid">
     <div class="doc-row">
@@ -334,13 +337,13 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
 <script>
 const OVERLAYS = {};
 document.querySelectorAll('.stack-overlay').forEach(el => OVERLAYS[el.id.replace('ol-','')] = el);
+const LABELS = {};
+document.querySelectorAll('.stack-label').forEach(el => LABELS[el.id.replace('lb-','')] = el);
 
-// Collection-layer replacement: swap the main image
 function showCollection(name) {
-  const main = document.querySelector('.stack-main');
-  main.src = `img/layerbreak/${name}.png`;
-  // Hide all overlays
+  document.querySelector('.stack-main').src = `img/layerbreak/${name}.png`;
   Object.values(OVERLAYS).forEach(el => el.classList.remove('on'));
+  Object.values(LABELS).forEach(el => el.classList.remove('on'));
   btns.forEach(b => b.classList.remove('active'));
   document.querySelector('[data-collection="'+name+'"]')?.classList.add('active');
 }
@@ -351,20 +354,20 @@ btns.forEach(btn => {
     const overlay = btn.dataset.overlay;
     const collection = btn.dataset.collection;
 
-    // Collection mode: swap base image, hide all overlays
     if (collection) {
       showCollection(collection);
       return;
     }
 
-    // Overlay mode
     if (overlay) {
       const el = OVERLAYS[overlay];
+      const lb = LABELS[overlay];
       if (el) el.classList.toggle('on');
+      if (lb) lb.classList.toggle('on');
       btn.classList.toggle('active');
     } else {
-      // Base render: hide all overlays
       Object.values(OVERLAYS).forEach(el => el.classList.remove('on'));
+      Object.values(LABELS).forEach(el => el.classList.remove('on'));
       btns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       document.querySelector('.stack-main').src = 'img/layerbreak/render_base.png';
