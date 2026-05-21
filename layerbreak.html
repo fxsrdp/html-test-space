@@ -27,7 +27,7 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   position:relative;
   width:100%;
   max-width:800px;
-  margin:0 auto 2rem;
+  margin:0 auto 1.5rem;
   border:1px solid #e8e6e0;
   border-radius:4px;
   overflow:hidden;
@@ -41,58 +41,53 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   background:var(--bg2);
   transition:opacity .4s;
 }
-.stack-overlay{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:fill;
-  mix-blend-mode:screen;
-  opacity:0;
-  transition:opacity .3s;
-  pointer-events:none;
-}
-.stack-overlay.normal-mode{mix-blend-mode:overlay}
-.stack-overlay.on{opacity:1}
-.stack-label{
-  position:absolute;
-  bottom:.5rem;
-  right:.75rem;
-  font-size:10px;
-  letter-spacing:.08em;
-  color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.5);
-  opacity:0;
-  transition:opacity .3s;
-  pointer-events:none;
-  z-index:2;
-}
-.stack-label.on{opacity:1}
 
-/* ═══════ LAYER CONTROLS ═══════ */
-.controls{
-  display:flex;flex-wrap:wrap;gap:.5rem;
+/* ═══════ LAYER THUMBNAILS ═══════ */
+.layer-thumbs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:.75rem;
   margin-bottom:2rem;
-  justify-content:center;
 }
-.layer-btn{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:.5rem .9rem;
+.layer-thumb{
   border:1px solid #e8e6e0;
   border-radius:4px;
-  font-size:var(--fs-sm);
-  letter-spacing:.04em;
-  color:#666;
-  background:none;
+  overflow:hidden;
+  background:var(--bg2);
   cursor:pointer;
-  transition:all .2s;
-  font-family:inherit;
+  transition:border-color .2s;
+  position:relative;
 }
-.layer-btn:hover{border-color:var(--c25);color:#2c2c2c}
-.layer-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
-.layer-btn .dot{width:8px;height:8px;border-radius:50%;background:var(--c);opacity:0;transition:opacity .2s}
-.layer-btn.active .dot{opacity:1}
-.layer-name{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;margin-top:.5rem;text-align:center}
+.layer-thumb:hover{border-color:var(--c25)}
+.layer-thumb.active{border-color:var(--c);box-shadow:0 0 0 2px var(--c12)}
+.layer-thumb img{
+  width:100%;
+  display:block;
+  aspect-ratio:2/1;
+  object-fit:contain;
+  background:var(--bg2);
+}
+.layer-thumb.native-square img{aspect-ratio:1/1}
+.layer-thumb .th-label{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:.35rem .6rem;
+  background:rgba(247,246,244,.9);
+  border-top:1px solid #e8e6e0;
+  font-size:10px;
+  letter-spacing:.06em;
+  color:#666;
+  text-align:center;
+}
+.layer-thumb.active .th-label{
+  color:var(--c);
+  background:var(--c08);
+}
+
+@media(max-width:768px){
+  .layer-thumbs{grid-template-columns:1fr}
+}
+
 
 /* ═══════ GENERATED SCENES ═══════ */
 .gen-grid{
@@ -206,34 +201,39 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   <div class="sec-title" style="font-size:1rem">Render Decomposition</div>
   <div class="stack-wrap" id="stack">
     <img class="stack-main" src="img/layerbreak/render_base.png" alt="Base render">
-    <img class="stack-overlay" id="ol-depth" src="img/layerbreak/depth_scene.png" alt="Depth">
-    <img class="stack-overlay normal-mode" id="ol-normals" src="img/layerbreak/normals.png" alt="Normals">
-    <img class="stack-overlay normal-mode" id="ol-objects" src="img/layerbreak/objects.png" alt="Object IDs">
-    <div class="stack-label" id="lb-depth" style="mix-blend-mode:normal">Depth Map</div>
-    <div class="stack-label" id="lb-normals" style="mix-blend-mode:normal">Normals</div>
-    <div class="stack-label" id="lb-objects" style="mix-blend-mode:normal">Object IDs</div>
   </div>
 
-  <div class="controls" id="layer-controls">
-    <button class="layer-btn active" data-layer="base" data-overlay="">
-      <span class="dot"></span>Base Render
-    </button>
-    <button class="layer-btn" data-overlay="depth">
-      <span class="dot"></span>Depth
-    </button>
-    <button class="layer-btn" data-overlay="normals">
-      <span class="dot"></span>Normals
-    </button>
-    <button class="layer-btn" data-overlay="objects">
-      <span class="dot"></span>Object IDs
-    </button>
-    <button class="layer-btn" data-collection="layer_collection">
-      <span class="dot"></span>Collection
-    </button>
-    <button class="layer-btn" data-collection="layer_felix1">
-      <span class="dot"></span>Felix 1
-    </button>
+  <div class="layer-thumbs" id="layer-thumbs">
+    <div class="layer-thumb active" data-src="render_base">
+      <img src="img/layerbreak/render_base.png" alt="Base">
+      <div class="th-label">Base Render — 2000×1000 (2:1)</div>
+    </div>
+    <div class="layer-thumb" data-src="depth_scene">
+      <img src="img/layerbreak/depth_scene.png" alt="Depth">
+      <div class="th-label">Depth Map — 1024×512 (2:1)</div>
+    </div>
+    <div class="layer-thumb" data-src="depth_full">
+      <img src="img/layerbreak/depth_full.png" alt="Depth sq">
+      <div class="th-label">Depth Square — 1024×1024 (SDXL input)</div>
+    </div>
+    <div class="layer-thumb native-square" data-src="normals">
+      <img src="img/layerbreak/normals.png" alt="Normals">
+      <div class="th-label">Normals — 512×512</div>
+    </div>
+    <div class="layer-thumb native-square" data-src="objects">
+      <img src="img/layerbreak/objects.png" alt="Objects">
+      <div class="th-label">Object IDs — 512×512</div>
+    </div>
+    <div class="layer-thumb" data-src="layer_collection">
+      <img src="img/layerbreak/layer_collection.png" alt="Collection">
+      <div class="th-label">Collection — 4000×2000 (2:1)</div>
+    </div>
+    <div class="layer-thumb" data-src="layer_felix1">
+      <img src="img/layerbreak/layer_felix1.png" alt="Felix 1">
+      <div class="th-label">Felix 1 — 4000×2000 (2:1)</div>
+    </div>
   </div>
+
 </section>
 
 <!-- ═══════ FLOW CONNECTOR + GENERATED SCENES ═══════ -->
@@ -335,43 +335,14 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
 </div>
 
 <script>
-const OVERLAYS = {};
-document.querySelectorAll('.stack-overlay').forEach(el => OVERLAYS[el.id.replace('ol-','')] = el);
-const LABELS = {};
-document.querySelectorAll('.stack-label').forEach(el => LABELS[el.id.replace('lb-','')] = el);
+const thumbs = document.querySelectorAll('.layer-thumb');
+const mainImg = document.querySelector('.stack-main');
 
-function showCollection(name) {
-  document.querySelector('.stack-main').src = `img/layerbreak/${name}.png`;
-  Object.values(OVERLAYS).forEach(el => el.classList.remove('on'));
-  Object.values(LABELS).forEach(el => el.classList.remove('on'));
-  btns.forEach(b => b.classList.remove('active'));
-  document.querySelector('[data-collection="'+name+'"]')?.classList.add('active');
-}
-
-const btns = document.querySelectorAll('.layer-btn');
-btns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const overlay = btn.dataset.overlay;
-    const collection = btn.dataset.collection;
-
-    if (collection) {
-      showCollection(collection);
-      return;
-    }
-
-    if (overlay) {
-      const el = OVERLAYS[overlay];
-      const lb = LABELS[overlay];
-      if (el) el.classList.toggle('on');
-      if (lb) lb.classList.toggle('on');
-      btn.classList.toggle('active');
-    } else {
-      Object.values(OVERLAYS).forEach(el => el.classList.remove('on'));
-      Object.values(LABELS).forEach(el => el.classList.remove('on'));
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelector('.stack-main').src = 'img/layerbreak/render_base.png';
-    }
+thumbs.forEach(th => {
+  th.addEventListener('click', () => {
+    thumbs.forEach(t => t.classList.remove('active'));
+    th.classList.add('active');
+    mainImg.src = `img/layerbreak/${th.dataset.src}.png`;
   });
 });
 </script>
