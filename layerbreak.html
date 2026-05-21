@@ -212,17 +212,17 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
       <img src="img/layerbreak/depth_scene.png" alt="Depth">
       <div class="th-label">Depth Map — 1024×512 (2:1)</div>
     </div>
-    <div class="layer-thumb" data-src="depth_full">
+    <div class="layer-thumb native-square" data-src="depth_full">
       <img src="img/layerbreak/depth_full.png" alt="Depth sq">
       <div class="th-label">Depth Square — 1024×1024 (SDXL input)</div>
     </div>
-    <div class="layer-thumb native-square" data-src="normals">
+    <div class="layer-thumb" data-src="normals">
       <img src="img/layerbreak/normals.png" alt="Normals">
-      <div class="th-label">Normals — 512×512</div>
+      <div class="th-label">Normals — 512×256 (2:1)</div>
     </div>
-    <div class="layer-thumb native-square" data-src="objects">
+    <div class="layer-thumb" data-src="objects">
       <img src="img/layerbreak/objects.png" alt="Objects">
-      <div class="th-label">Object IDs — 512×512</div>
+      <div class="th-label">Object IDs — 512×256 (2:1)</div>
     </div>
     <div class="layer-thumb" data-src="layer_collection">
       <img src="img/layerbreak/layer_collection.png" alt="Collection">
@@ -294,11 +294,11 @@ body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var
   <div class="doc-grid">
     <div class="doc-row">
       <h4>Object-ID Pass</h4>
-      <div class="v">All 21 meshes replaced with random-color Emission shaders (seed 42). EEVEE render at 512×512. Each surface gets a unique RGB ID — useful for per-object masking in compositing or segmentation.</div>
+      <div class="v">All 21 meshes replaced with random-color Emission shaders (seed 42). EEVEE render at 512×256 (2:1). Each surface gets a unique RGB ID — useful for per-object masking in compositing or segmentation.</div>
     </div>
     <div class="doc-row">
       <h4>Normal Map Pass</h4>
-      <div class="v">World-space normals remapped via Vector Math (MULTIPLY_ADD: ×0.5 + 0.5) — encoding XYZ ∈ [−1,1] as RGB ∈ [0,1]. Emission shader bypasses lighting. Useful for relighting passes.</div>
+      <div class="v">World-space normals remapped via Vector Math (MULTIPLY_ADD: ×0.5 + 0.5) — encoding XYZ ∈ [−1,1] as RGB ∈ [0,1]. EEVEE at 512×256 (2:1). Emission shader bypasses lighting. Useful for relighting passes.</div>
     </div>
   </div>
   <div class="doc-row">
