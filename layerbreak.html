@@ -32,7 +32,7 @@ body{
 /* ═══════ CANVAS ═══════ */
 .canvas-wrap{
   max-width:800px;margin:0 auto 1rem;
-  border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:var(--bg2);
+  border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:#111;
 }
 .canvas{
   position:relative;width:100%;aspect-ratio:1/1;
@@ -41,21 +41,15 @@ body{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:contain;
 }
-/* backgrounds */
 .canvas .bg{transition:opacity .5s}
 .canvas .bg.hidden{opacity:0;pointer-events:none}
 .canvas .bg.on{opacity:1}
-/* product alpha — always visible */
 .canvas .product{z-index:2}
-/* analysis overlays */
 .canvas .overlay{z-index:3;opacity:0;transition:opacity .3s;pointer-events:none}
 .canvas .overlay.on{opacity:1}
-.canvas .overlay.depth-o{opacity:0;mix-blend-mode:screen}
-.canvas .overlay.depth-o.on{opacity:1}
-.canvas .overlay.normal-o{opacity:0;mix-blend-mode:overlay}
-.canvas .overlay.normal-o.on{opacity:1}
-.canvas .overlay.objects-o{opacity:0;mix-blend-mode:screen}
-.canvas .overlay.objects-o.on{opacity:1}
+.canvas .overlay.depth-o.on{mix-blend-mode:screen}
+.canvas .overlay.normal-o.on{mix-blend-mode:overlay}
+.canvas .overlay.objects-o.on{mix-blend-mode:screen}
 
 .badge{
   position:absolute;bottom:.5rem;right:.75rem;z-index:4;
@@ -66,21 +60,10 @@ body{
 .badge.on{opacity:1}
 
 /* ═══════ CONTROLS ═══════ */
-.controls{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1.5rem}
-.ctrl-group{display:flex;gap:.35rem;align-items:center}
-.ctrl-group .sep{width:1px;height:20px;background:#e0ddd6;margin:0 .5rem}
+.controls{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:.75rem}
+.ctrl-group-label{font-size:10px;color:#aaa;letter-spacing:.06em;align-self:center;margin-right:.25rem}
 
-.ctrl-btn{
-  display:inline-flex;align-items:center;gap:.35rem;
-  padding:.45rem .75rem;border:1px solid #e0ddd6;border-radius:4px;
-  font-size:11px;letter-spacing:.04em;color:#777;
-  background:none;cursor:pointer;transition:all .2s;font-family:inherit;
-}
-.ctrl-btn:hover{border-color:var(--c25);color:#444}
-.ctrl-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
-
-/* background radio group */
-.bg-controls{display:flex;gap:.5rem;justify-content:center;margin-top:.75rem}
+.bg-controls{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
 .bg-btn{
   display:inline-flex;align-items:center;gap:.35rem;
   padding:.45rem .75rem;border:1px solid #e0ddd6;border-radius:3px;
@@ -92,13 +75,22 @@ body{
 .bg-btn .swatch{width:8px;height:8px;border-radius:50%;background:#ddd}
 .bg-btn.active .swatch{background:var(--c)}
 
+.ctrl-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.45rem .75rem;border:1px solid #e0ddd6;border-radius:4px;
+  font-size:11px;letter-spacing:.04em;color:#777;
+  background:none;cursor:pointer;transition:all .2s;font-family:inherit;
+}
+.ctrl-btn:hover{border-color:var(--c25);color:#444}
+.ctrl-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
+
 /* ═══════ FLOW ═══════ */
-.flow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;font-size:10px;letter-spacing:.05em}
+.flow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:1.5rem 0 2rem;font-size:10px;letter-spacing:.05em}
 .flow .step{padding:.3rem .55rem;border:1px solid var(--c18);border-radius:3px;color:var(--c);white-space:nowrap}
 .flow .arr{color:#bbb}
 
 /* ═══════ DOC ═══════ */
-.doc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin:2rem 0}
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:2rem 0}
 .doc-row{background:var(--bg2);border:1px solid #e0ddd6;border-radius:4px;padding:1rem}
 .doc-row h4{font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:.25rem}
 .doc-row .v{color:#888;font-size:10px;letter-spacing:.03em;line-height:1.6}
@@ -123,7 +115,7 @@ body{
   <div class="sec-label">Gentle Monster SG</div>
   <div class="sec-title">Layer Break</div>
   <div class="sec-desc">
-    Product fixed by alpha channel. Backgrounds swapped independently. Analysis layers toggled on top. All passes share identical camera perspective and sensor fit — pixel-aligned overlay.
+    Isolated product alpha (sg collection only). Backgrounds swapped independently. Analysis layers toggled on top. Object-ID maps enable per-object compositing &mdash; the sunglasses stay fixed while the world behind them changes.
   </div>
 </section>
 
@@ -131,78 +123,77 @@ body{
 <div class="canvas-wrap">
   <div class="canvas" id="canvas">
 
-    <!-- Backgrounds (z-index 1) -->
+    <!-- z1: Backgrounds (swappable) -->
     <img class="bg on" data-bg="jungle" src="img/pipeline/gm_jungle_bg.png" alt="Jungle">
     <img class="bg hidden" data-bg="space" src="img/pipeline/gm_space_bg.png" alt="Space">
     <img class="bg hidden" data-bg="fashion" src="img/pipeline/gm_fashion_bg.png" alt="Fashion">
 
-    <!-- Product alpha (z-index 2, always on) -->
-    <img class="product" src="img/pipeline/gentle_monster_alpha.png" alt="Product">
+    <!-- z2: Product alpha (isolated sg, always on) -->
+    <img class="product" src="img/pipeline/sg_alpha.png" alt="Sunglasses">
 
-    <!-- Analysis overlays (z-index 3, toggleable) -->
+    <!-- z3: Analysis overlays (toggleable) -->
     <img class="overlay depth-o" id="ol-depth" src="img/pipeline/gentle_monster_depth.png" alt="Depth">
     <img class="overlay normal-o" id="ol-normals" src="img/pipeline/gentle_monster_normal.png" alt="Normals">
     <img class="overlay objects-o" id="ol-objects" src="img/pipeline/gentle_monster_objects.png" alt="Objects">
 
-    <!-- Badges -->
-    <div class="badge" id="badge-depth">Depth Map (16-bit Cycles)</div>
-    <div class="badge" id="badge-normals">World-Space Normals</div>
-    <div class="badge" id="badge-objects">Object-ID (21 colors)</div>
+    <div class="badge" id="badge-depth">Depth Map</div>
+    <div class="badge" id="badge-normals">Normals</div>
+    <div class="badge" id="badge-objects">Object IDs</div>
   </div>
 </div>
 
 <!-- ═══════ CONTROLS ═══════ -->
 <div class="controls">
-  <span style="font-size:10px;color:#aaa;letter-spacing:.06em;margin-right:.5rem">Background:</span>
+  <span class="ctrl-group-label">Background:</span>
 </div>
 <div class="bg-controls" id="bg-switcher">
   <button class="bg-btn active" data-bg="jungle"><span class="swatch"></span>Jungle</button>
-  <button class="bg-btn" data-bg="space"><span class="swatch"></span>Space</button>
-  <button class="bg-btn" data-bg="fashion"><span class="swatch"></span>Fashion</button>
+  <button class="bg-btn" data-bg="space"><span class="swatch"></span>Space Station</button>
+  <button class="bg-btn" data-bg="fashion"><span class="swatch"></span>Fashion Editorial</button>
 </div>
 
 <div class="controls" style="margin-top:1rem">
-  <span style="font-size:10px;color:#aaa;letter-spacing:.06em;margin-right:.5rem">Analysis overlay:</span>
+  <span class="ctrl-group-label">Overlay:</span>
   <button class="ctrl-btn" data-overlay="depth">Depth</button>
   <button class="ctrl-btn" data-overlay="normals">Normals</button>
   <button class="ctrl-btn" data-overlay="objects">Object IDs</button>
 </div>
 
-<!-- ═══════ PIPELINE ═══════ -->
+<!-- ═══════ FLOW ═══════ -->
 <div class="flow">
-  <span class="step">Blender 5.1</span><span class="arr">&rarr;</span>
-  <span class="step">Render Passes</span><span class="arr">&rarr;</span>
+  <span class="step">Blender &rarr; Collection Filter (sg only)</span><span class="arr">&rarr;</span>
+  <span class="step">EEVEE Alpha</span><span class="arr">&rarr;</span>
   <span class="step">Cycles Depth</span><span class="arr">&rarr;</span>
   <span class="step">Pad to Square</span><span class="arr">&rarr;</span>
-  <span class="step">ComfyUI SDXL</span><span class="arr">&rarr;</span>
+  <span class="step">SDXL &times;3</span><span class="arr">&rarr;</span>
   <span class="step">Layer Composite</span>
 </div>
 
-<!-- ═══════ TECHNIQUE ═══════ -->
+<!-- ═══════ DOC ═══════ -->
 <div class="doc-grid">
   <div class="doc-row">
-    <h4>Scene</h4>
-    <div class="v">gentle monster.blend &middot; 39 objects, 21 meshes &middot; Camera.001: 50mm perspective &middot; 2:1 ultrawide &middot; FFMPEG movie format</div>
+    <h4>sg Collection</h4>
+    <div class="v">Cube.002 (37K verts) + Plane.004 (168K verts) &middot; Sub-collection under felix 1 &middot; Sunglasses geometry only</div>
   </div>
   <div class="doc-row">
-    <h4>Analysis Passes</h4>
-    <div class="v">EEVEE &middot; Alpha beauty (transparent bg) + Object-ID (21 emission colors, seed 42) + World-space normals (XYZ&rarr;RGB) &middot; All 2048&times;1024 &middot; sensor_fit HORIZONTAL</div>
+    <h4>Product Alpha</h4>
+    <div class="v">EEVEE render with only sg objects visible &middot; 2048&times;1024 &middot; Transparent background &middot; All other 19 objects hidden during render</div>
+  </div>
+  <div class="doc-row">
+    <h4>Object ID Map</h4>
+    <div class="v">21 emission colors (seed 42) &middot; Each mesh = unique RGB &middot; Per-object masking possible &middot; 2048&times;1024</div>
   </div>
   <div class="doc-row">
     <h4>Depth Map</h4>
-    <div class="v">Cycles 5 samples &middot; Compositor: Z-Pass &rarr; Normalize &rarr; Invert &rarr; FileOutput EXR &rarr; OpenEXR+Pillow &rarr; 16-bit PNG &middot; 2048&times;1024</div>
+    <div class="v">Cycles 5 spp &middot; Compositor Z-Pass &rarr; Normalize &rarr; Invert &rarr; EXR&rarr;PNG &middot; 16-bit &middot; 2048&times;1024</div>
   </div>
   <div class="doc-row">
-    <h4>SDXL Generation</h4>
-    <div class="v">Depth padded to 2048&times;2048 &middot; ControlNet Depth SDXL 0.85 &middot; dpmpp_2m karras &middot; CFG 7.0 &middot; 20 steps &middot; 1024&times;1024 output &middot; MPS ~3 min</div>
-  </div>
-  <div class="doc-row">
-    <h4>Overlay Compatibility</h4>
-    <div class="v">All passes: identical resolution, camera, sensor_fit (HORIZONTAL). Depth padded to square for SDXL — scene occupies center strip. Product alpha keeps foreground fixed while backgrounds swap.</div>
+    <h4>SDXL Backgrounds</h4>
+    <div class="v">Depth padded to square &middot; ControlNet Depth 0.85 &middot; dpmpp_2m karras CFG 7.0 &middot; 3 prompts: jungle / space / fashion</div>
   </div>
   <div class="doc-row">
     <h4>Layer Stack</h4>
-    <div class="v">z1: SDXL background (square, swappable) &middot; z2: Beauty alpha (product &mdash; always visible) &middot; z3: Analysis overlays (depth screen, normals overlay, objects screen &mdash; toggleable)</div>
+    <div class="v">z1: SDXL bg (swappable) &middot; z2: sg alpha (fixed product) &middot; z3: depth / normals / objects (toggleable overlays)</div>
   </div>
 </div>
 
@@ -221,29 +212,23 @@ bgBtns.forEach(btn=>{
     bgBtns.forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     bgs.forEach(bg=>{
-      if(bg.dataset.bg===key){bg.classList.remove('hidden');bg.classList.add('on')}
-      else{bg.classList.add('hidden');bg.classList.remove('on')}
+      bg.classList.toggle('hidden', bg.dataset.bg!==key);
+      bg.classList.toggle('on', bg.dataset.bg===key);
     });
   });
 });
 
 // Analysis overlay toggles
 const overlays={},badges={};
-document.querySelectorAll('.overlay').forEach(el=>{
-  overlays[el.id.replace('ol-','')]=el;
-});
-document.querySelectorAll('.badge').forEach(el=>{
-  badges[el.id.replace('badge-','')]=el;
-});
+document.querySelectorAll('.overlay').forEach(el=>overlays[el.id.replace('ol-','')]=el);
+document.querySelectorAll('.badge').forEach(el=>badges[el.id.replace('badge-','')]=el);
 
 document.querySelectorAll('.ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const key=btn.dataset.overlay;
-    const el=overlays[key];
-    const badge=badges[key];
     btn.classList.toggle('active');
-    if(el) el.classList.toggle('on');
-    if(badge) badge.classList.toggle('on');
+    if(overlays[key]) overlays[key].classList.toggle('on');
+    if(badges[key]) badges[key].classList.toggle('on');
   });
 });
 </script>
