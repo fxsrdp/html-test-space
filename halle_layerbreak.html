@@ -40,7 +40,8 @@ body{
 .canvas .ly.ana-depth.on{mix-blend-mode:screen}
 .canvas .ly.ana-norm.on{mix-blend-mode:overlay}
 .canvas .ly.ana-objs.on{mix-blend-mode:multiply;opacity:.85}
-.canvas .ly.ana-layer.on{mix-blend-mode:screen;opacity:.7}
+/* layer mask overlays — normal compositing, alpha handles the cutout */
+.canvas .ly.layer-mask.on{opacity:1;mix-blend-mode:normal}
 
 .ctrl-section{margin-bottom:.8rem}
 .ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
@@ -56,6 +57,14 @@ body{
 .ctrl-btn.on{border-color:var(--c);color:var(--c);background:var(--c08)}
 .ctrl-btn .dot{width:5px;height:5px;border-radius:50%;background:#ccc;flex-shrink:0}
 .ctrl-btn.on .dot{background:var(--c)}
+
+/* colored dots */
+.ctrl-btn .dot.halle{background:#00e5ff}
+.ctrl-btn .dot.porsche{background:#ff6450}
+.ctrl-btn .dot.audi{background:#50b4ff}
+.ctrl-btn .dot.decke{background:#ffc83c}
+.ctrl-btn .dot.ball{background:#8cdc50}
+.ctrl-btn .dot.hoop{background:#c88cff}
 
 .scene-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:2rem}
 .scene-card{
@@ -76,6 +85,11 @@ body{
 .stat-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.06em}
 
 .layers-desc{color:#888;font-size:.85rem;margin-bottom:1rem}
+
+/* legend row */
+.legend{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.5rem}
+.legend-item{display:flex;align-items:center;gap:.25rem;font-size:10px;color:#888}
+.legend-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -91,10 +105,10 @@ body{
 <div class="inner">
 
 <section style="margin-bottom:1.5rem">
-  <div class="sec-label">HALLE 2</div>
-  <div class="sec-title">Layer Break</div>
+  <div class="sec-label">HALLE 2 — Layer Decomposition</div>
+  <div class="sec-title">Isolated Collection Masks</div>
   <div class="sec-desc">
-    108 objects, 11 collections — 2 cars in an industrial hall with a suspended ceiling over one bay. Depth maps extracted per collection. Toggle analysis passes and isolated layers.
+    Each collection rendered in isolation (EEVEE, film_transparent) — real alpha cutouts. Colored masks show exactly where each layer contributes geometry in 3D space. Toggle multiple layers to see spatial relationships.
   </div>
 </section>
 
@@ -106,48 +120,49 @@ body{
     <img class="ly ana-norm"  id="ly-normals" src="img/halle/normal.png">
     <img class="ly ana-objs"  id="ly-objects" src="img/halle/objects.png">
 
-    <!-- z2: Layer depth overlays (screen blend — isolate each collection's depth) -->
-    <img class="ly ana-layer" id="ly-halle"    src="img/halle/layer_halle.png">
-    <img class="ly ana-layer" id="ly-porsche"  src="img/halle/layer_porsche.png">
-    <img class="ly ana-layer" id="ly-audi"     src="img/halle/layer_audi.png">
-    <img class="ly ana-layer" id="ly-decke"    src="img/halle/layer_decke.png">
-    <img class="ly ana-layer" id="ly-ball"     src="img/halle/layer_ball.png">
-    <img class="ly ana-layer" id="ly-hoop"     src="img/halle/layer_hoop.png">
+    <!-- z3: Colored layer masks (normal blend, alpha cutout) -->
+    <img class="ly layer-mask" id="ly-halle"   src="img/halle/mask_halle.png">
+    <img class="ly layer-mask" id="ly-porsche" src="img/halle/mask_porsche.png">
+    <img class="ly layer-mask" id="ly-audi"    src="img/halle/mask_audi.png">
+    <img class="ly layer-mask" id="ly-decke"   src="img/halle/mask_decke.png">
+    <img class="ly layer-mask" id="ly-ball"    src="img/halle/mask_ball.png">
+    <img class="ly layer-mask" id="ly-hoop"    src="img/halle/mask_hoop.png">
 
-    <!-- z1: Base alpha render (always on) -->
+    <!-- z1: Base alpha beauty (always on) -->
     <img class="ly on" id="alpha" src="img/halle/alpha.png">
 
   </div>
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label">Editors</div>
-  <div class="ctrl-row" id="edit-grp">
-    <button class="ctrl-btn on" data-id="alpha"><span class="dot"></span>Beauty</button>
+  <div class="ctrl-label">Layer Masks (α-isolated, EEVEE 32 spp)</div>
+  <div class="legend">
+    <div class="legend-item"><span class="legend-swatch" style="background:#00e5ff"></span>Halle</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#ff6450"></span>Porsche 911</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#50b4ff"></span>Audi RS6</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#ffc83c"></span>Decke</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#8cdc50"></span>B-Ball</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#c88cff"></span>Hoop</div>
+  </div>
+  <div class="ctrl-row" id="layer-grp">
+    <button class="ctrl-btn" data-id="ly-halle"><span class="dot halle"></span>Halle</button>
+    <button class="ctrl-btn" data-id="ly-porsche"><span class="dot porsche"></span>Porsche 911</button>
+    <button class="ctrl-btn" data-id="ly-audi"><span class="dot audi"></span>Audi RS6</button>
+    <button class="ctrl-btn" data-id="ly-decke"><span class="dot decke"></span>Decke</button>
+    <button class="ctrl-btn" data-id="ly-ball"><span class="dot ball"></span>Ball</button>
+    <button class="ctrl-btn" data-id="ly-hoop"><span class="dot hoop"></span>Hoop</button>
+  </div>
+  <div class="layers-desc" style="margin-top:.5rem">
+    Toggle layers to see spatial depth overlap. The Decke (amber) sits above the Porsche (red) — both are inside the Halle (cyan).
   </div>
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label">Analysis</div>
+  <div class="ctrl-label">Analysis Passes</div>
   <div class="ctrl-row" id="ana-grp">
     <button class="ctrl-btn" data-id="ly-depth"><span class="dot"></span>Depth</button>
     <button class="ctrl-btn" data-id="ly-normals"><span class="dot"></span>Normals</button>
     <button class="ctrl-btn" data-id="ly-objects"><span class="dot"></span>Object IDs</button>
-  </div>
-</div>
-
-<div class="ctrl-section">
-  <div class="ctrl-label">Layer Isolation (Depth)</div>
-  <div class="ctrl-row" id="layer-grp">
-    <button class="ctrl-btn" data-id="ly-halle"><span class="dot"></span>Halle</button>
-    <button class="ctrl-btn" data-id="ly-porsche"><span class="dot"></span>Porsche 911</button>
-    <button class="ctrl-btn" data-id="ly-audi"><span class="dot"></span>Audi RS6</button>
-    <button class="ctrl-btn" data-id="ly-decke"><span class="dot"></span>Decke (Ceiling)</button>
-    <button class="ctrl-btn" data-id="ly-ball"><span class="dot"></span>Basketball</button>
-    <button class="ctrl-btn" data-id="ly-hoop"><span class="dot"></span>Hoop</button>
-  </div>
-  <div class="layers-desc" style="margin-top:.5rem">
-    Each layer shows that collection's isolated depth contribution. Toggle multiple layers to see how objects relate in depth space.
   </div>
 </div>
 
@@ -166,7 +181,7 @@ body{
   <div class="sec-label">SDXL + ControlNet Depth</div>
   <div class="sec-title">3 Editorial Scenes</div>
   <div class="sec-desc">
-    Full scene depth map → ControlNet Depth SDXL (strength 0.85, dpmpp_2m+karras, CFG 7.0, 20 steps, 1024²). Each variation reimagines the same 3D space in a different atmosphere.
+    Full scene depth map → ControlNet Depth SDXL (strength 0.85, dpmpp_2m+karras, CFG 7.0, 20 steps). Same 3D space, three atmospheres.
   </div>
 </section>
 
@@ -175,21 +190,21 @@ body{
     <img src="img/halle/showroom.png" alt="Showroom" loading="lazy">
     <div class="meta">
       <div class="meta-title">Luxury Showroom</div>
-      <div class="meta-prompt">Modern automotive showroom, Porsche 911 and Audi RS6 side by side, polished concrete floors, natural skylight, clean architectural lines, magazine editorial</div>
+      <div class="meta-prompt">Porsche 911 and Audi RS6 side by side, polished concrete floors, natural skylight, clean architectural lines, magazine editorial</div>
     </div>
   </div>
   <div class="scene-card">
     <img src="img/halle/noir.png" alt="Noir" loading="lazy">
     <div class="meta">
       <div class="meta-title">Industrial Noir</div>
-      <div class="meta-prompt">Underground parking garage at night, dramatic fog, fluorescent lights, concrete walls, cinematic wide shot, moody shadows, film noir</div>
+      <div class="meta-prompt">Underground parking garage at night, dramatic fog, fluorescent lights, concrete walls, cinematic wide shot, film noir</div>
     </div>
   </div>
   <div class="scene-card">
     <img src="img/halle/cyberpunk.png" alt="Cyberpunk" loading="lazy">
     <div class="meta">
       <div class="meta-title">Cyberpunk Garage</div>
-      <div class="meta-prompt">Cyberpunk underground garage, neon purple and cyan lighting, rain puddles, reflections, atmospheric haze, blade runner aesthetic</div>
+      <div class="meta-prompt">Neon purple and cyan, rain puddles, reflections, atmospheric haze, blade runner aesthetic</div>
     </div>
   </div>
 </div>
@@ -200,11 +215,11 @@ body{
   <div class="sec-title">How it Works</div>
   <div class="sec-desc" style="font-size:.85rem;max-width:100%">
     <code style="font-size:11px;color:#888">
-    Blender 5.1 (Cycles) → Z-Pass → Normalize → Invert → EXR → 16‑bit PNG<br>
-    &nbsp;├─ Full scene depth (1024×1024, square-padded for SDXL)<br>
-    &nbsp;└─ Per‑collection depth (6 layers: Halle, Porsche, Audi, Decke, Ball, Hoop)<br>
-    Blender 5.1 (EEVEE) → Alpha beauty + Object‑ID + Normal map (1024×341)<br>
-    ComfyUI (localhost:8188) → ControlNet Depth SDXL → 3 editorial scenes (2.5–3 min each)
+    Blender 5.1 (EEVEE, 32 spp) → per-collection α-beauty + film_transparent → EXR<br>
+    &nbsp;└─ System Python (OpenEXR+Pillow) → RGBA PNG with embedded alpha<br>
+    &nbsp;└─ Python (Pillow) → colorized mask overlays (60% opacity)<br>
+    Blender 5.1 (Cycles) → full-scene depth 1024×1024 → square-padded<br>
+    ComfyUI (localhost:8188) → ControlNet Depth SDXL → 3 scenes (~2.8 min each)
     </code>
   </div>
 </section>
@@ -212,15 +227,7 @@ body{
 </div>
 
 <script>
-function radio(sel){
-  document.querySelectorAll(sel+' .ctrl-btn').forEach(b=>{
-    b.classList.remove('on');
-    const el=document.getElementById(b.dataset.id);
-    if(el)el.classList.remove('on');
-  });
-}
-
-// Analysis toggles (multi-select)
+// Analysis toggles (multi-select — can have multiple on)
 document.querySelectorAll('#ana-grp .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',function(){
     this.classList.toggle('on');
@@ -228,7 +235,7 @@ document.querySelectorAll('#ana-grp .ctrl-btn').forEach(btn=>{
   });
 });
 
-// Layer isolation toggles (multi-select)
+// Layer mask toggles (multi-select)
 document.querySelectorAll('#layer-grp .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',function(){
     this.classList.toggle('on');
