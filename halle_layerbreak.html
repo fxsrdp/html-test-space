@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layer Break — HALLE 2</title>
+<style>
+:root{
+  --c:#00e5ff;--c08:rgba(0,229,255,.08);--c12:rgba(0,229,255,.12);
+  --c18:rgba(0,229,255,.18);--c25:rgba(0,229,255,.25);
+  --bg1:#f7f6f4;--bg2:#ece8df;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg1)}
+body{
+  font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;
+  background:var(--bg1);line-height:1.6;font-size:clamp(.875rem,1.1vw,1.05rem);
+  -webkit-font-smoothing:antialiased;padding:2rem 1.5rem 0;
+}
+.nav{
+  max-width:900px;margin:0 auto 2rem;display:flex;align-items:center;gap:1.2rem;
+  font-size:12px;letter-spacing:.06em;border-bottom:1px solid #e0ddd6;padding-bottom:.75rem;
+}
+.nav b{font-weight:500;color:#1a1a1a;flex:1}
+.nav a{color:#999;text-decoration:none;transition:color .2s}
+.nav a:hover,.nav a.active{color:var(--c)}
+.inner{max-width:900px;margin:0 auto}
+.sec-title{font-size:clamp(1.2rem,2vw,1.6rem);font-weight:300;letter-spacing:.03em;color:#1a1a1a;margin-bottom:.25rem}
+.sec-label{font-size:12px;letter-spacing:.1em;color:var(--c);text-transform:uppercase;margin-bottom:.3rem}
+.sec-desc{color:#888;margin-bottom:1.5rem;max-width:560px;font-size:.9rem}
+
+.canvas-wrap{
+  max-width:900px;margin:0 auto 1.5rem;
+  border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:#111;
+}
+.canvas{position:relative;width:100%;aspect-ratio:3/1}
+.canvas img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.canvas .ly{opacity:0;pointer-events:none;transition:opacity .3s}
+.canvas .ly.on{opacity:1}
+.canvas .ly.ana-depth.on{mix-blend-mode:screen}
+.canvas .ly.ana-norm.on{mix-blend-mode:overlay}
+.canvas .ly.ana-objs.on{mix-blend-mode:multiply;opacity:.85}
+.canvas .ly.ana-layer.on{mix-blend-mode:screen;opacity:.7}
+
+.ctrl-section{margin-bottom:.8rem}
+.ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
+.ctrl-row{display:flex;gap:.35rem;flex-wrap:wrap}
+
+.ctrl-btn{
+  display:inline-flex;align-items:center;gap:.25rem;
+  padding:.4rem .65rem;border:1px solid #e0ddd6;border-radius:3px;
+  font-size:10px;letter-spacing:.04em;color:#888;
+  background:none;cursor:pointer;transition:all .2s;font-family:inherit;
+}
+.ctrl-btn:hover{border-color:var(--c25);color:#555}
+.ctrl-btn.on{border-color:var(--c);color:var(--c);background:var(--c08)}
+.ctrl-btn .dot{width:5px;height:5px;border-radius:50%;background:#ccc;flex-shrink:0}
+.ctrl-btn.on .dot{background:var(--c)}
+
+.scene-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-bottom:2rem}
+.scene-card{
+  border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:#fff;
+  transition:border-color .3s,transform .2s;
+}
+.scene-card:hover{border-color:var(--c25);transform:translateY(-1px)}
+.scene-card img{width:100%;height:auto;display:block}
+.scene-card .meta{padding:.7rem .8rem;border-top:1px solid #f0ede7}
+.scene-card .meta-title{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:.15rem}
+.scene-card .meta-prompt{font-size:10px;color:#aaa;line-height:1.5;max-height:2.7em;overflow:hidden}
+
+.scene-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.5rem;margin-bottom:2rem}
+.stat-item{
+  padding:.7rem .8rem;border:1px solid #e0ddd6;border-radius:3px;background:#fff;
+}
+.stat-value{font-size:1.4rem;font-weight:300;color:var(--c);letter-spacing:.02em}
+.stat-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.06em}
+
+.layers-desc{color:#888;font-size:.85rem;margin-bottom:1rem}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <b>HTML TEST SPACE</b>
+  <a href="index.html">Index</a>
+  <a href="layerbreak.html">Layer Break</a>
+  <a href="halle_layerbreak.html" class="active">HALLE 2</a>
+  <a href="pipeline.html">Pipeline</a>
+</nav>
+
+<div class="inner">
+
+<section style="margin-bottom:1.5rem">
+  <div class="sec-label">HALLE 2</div>
+  <div class="sec-title">Layer Break</div>
+  <div class="sec-desc">
+    108 objects, 11 collections — 2 cars in an industrial hall with a suspended ceiling over one bay. Depth maps extracted per collection. Toggle analysis passes and isolated layers.
+  </div>
+</section>
+
+<div class="canvas-wrap">
+  <div class="canvas" id="canvas">
+
+    <!-- z2: Analysis passes (blend modes) -->
+    <img class="ly ana-depth" id="ly-depth"   src="img/halle/depth_full.png">
+    <img class="ly ana-norm"  id="ly-normals" src="img/halle/normal.png">
+    <img class="ly ana-objs"  id="ly-objects" src="img/halle/objects.png">
+
+    <!-- z2: Layer depth overlays (screen blend — isolate each collection's depth) -->
+    <img class="ly ana-layer" id="ly-halle"    src="img/halle/layer_halle.png">
+    <img class="ly ana-layer" id="ly-porsche"  src="img/halle/layer_porsche.png">
+    <img class="ly ana-layer" id="ly-audi"     src="img/halle/layer_audi.png">
+    <img class="ly ana-layer" id="ly-decke"    src="img/halle/layer_decke.png">
+    <img class="ly ana-layer" id="ly-ball"     src="img/halle/layer_ball.png">
+    <img class="ly ana-layer" id="ly-hoop"     src="img/halle/layer_hoop.png">
+
+    <!-- z1: Base alpha render (always on) -->
+    <img class="ly on" id="alpha" src="img/halle/alpha.png">
+
+  </div>
+</div>
+
+<div class="ctrl-section">
+  <div class="ctrl-label">Editors</div>
+  <div class="ctrl-row" id="edit-grp">
+    <button class="ctrl-btn on" data-id="alpha"><span class="dot"></span>Beauty</button>
+  </div>
+</div>
+
+<div class="ctrl-section">
+  <div class="ctrl-label">Analysis</div>
+  <div class="ctrl-row" id="ana-grp">
+    <button class="ctrl-btn" data-id="ly-depth"><span class="dot"></span>Depth</button>
+    <button class="ctrl-btn" data-id="ly-normals"><span class="dot"></span>Normals</button>
+    <button class="ctrl-btn" data-id="ly-objects"><span class="dot"></span>Object IDs</button>
+  </div>
+</div>
+
+<div class="ctrl-section">
+  <div class="ctrl-label">Layer Isolation (Depth)</div>
+  <div class="ctrl-row" id="layer-grp">
+    <button class="ctrl-btn" data-id="ly-halle"><span class="dot"></span>Halle</button>
+    <button class="ctrl-btn" data-id="ly-porsche"><span class="dot"></span>Porsche 911</button>
+    <button class="ctrl-btn" data-id="ly-audi"><span class="dot"></span>Audi RS6</button>
+    <button class="ctrl-btn" data-id="ly-decke"><span class="dot"></span>Decke (Ceiling)</button>
+    <button class="ctrl-btn" data-id="ly-ball"><span class="dot"></span>Basketball</button>
+    <button class="ctrl-btn" data-id="ly-hoop"><span class="dot"></span>Hoop</button>
+  </div>
+  <div class="layers-desc" style="margin-top:.5rem">
+    Each layer shows that collection's isolated depth contribution. Toggle multiple layers to see how objects relate in depth space.
+  </div>
+</div>
+
+<!-- Scene Stats -->
+<div class="scene-stats">
+  <div class="stat-item"><div class="stat-value">108</div><div class="stat-label">Objects</div></div>
+  <div class="stat-item"><div class="stat-value">98</div><div class="stat-label">Meshes</div></div>
+  <div class="stat-item"><div class="stat-value">11</div><div class="stat-label">Collections</div></div>
+  <div class="stat-item"><div class="stat-value">101</div><div class="stat-label">Materials</div></div>
+  <div class="stat-item"><div class="stat-value">54mm</div><div class="stat-label">Camera</div></div>
+  <div class="stat-item"><div class="stat-value">3:1</div><div class="stat-label">Aspect</div></div>
+</div>
+
+<!-- 3 Editorial Variations -->
+<section style="margin-bottom:1rem">
+  <div class="sec-label">SDXL + ControlNet Depth</div>
+  <div class="sec-title">3 Editorial Scenes</div>
+  <div class="sec-desc">
+    Full scene depth map → ControlNet Depth SDXL (strength 0.85, dpmpp_2m+karras, CFG 7.0, 20 steps, 1024²). Each variation reimagines the same 3D space in a different atmosphere.
+  </div>
+</section>
+
+<div class="scene-grid">
+  <div class="scene-card">
+    <img src="img/halle/showroom.png" alt="Showroom" loading="lazy">
+    <div class="meta">
+      <div class="meta-title">Luxury Showroom</div>
+      <div class="meta-prompt">Modern automotive showroom, Porsche 911 and Audi RS6 side by side, polished concrete floors, natural skylight, clean architectural lines, magazine editorial</div>
+    </div>
+  </div>
+  <div class="scene-card">
+    <img src="img/halle/noir.png" alt="Noir" loading="lazy">
+    <div class="meta">
+      <div class="meta-title">Industrial Noir</div>
+      <div class="meta-prompt">Underground parking garage at night, dramatic fog, fluorescent lights, concrete walls, cinematic wide shot, moody shadows, film noir</div>
+    </div>
+  </div>
+  <div class="scene-card">
+    <img src="img/halle/cyberpunk.png" alt="Cyberpunk" loading="lazy">
+    <div class="meta">
+      <div class="meta-title">Cyberpunk Garage</div>
+      <div class="meta-prompt">Cyberpunk underground garage, neon purple and cyan lighting, rain puddles, reflections, atmospheric haze, blade runner aesthetic</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pipeline -->
+<section style="margin-bottom:3rem">
+  <div class="sec-label">Pipeline</div>
+  <div class="sec-title">How it Works</div>
+  <div class="sec-desc" style="font-size:.85rem;max-width:100%">
+    <code style="font-size:11px;color:#888">
+    Blender 5.1 (Cycles) → Z-Pass → Normalize → Invert → EXR → 16‑bit PNG<br>
+    &nbsp;├─ Full scene depth (1024×1024, square-padded for SDXL)<br>
+    &nbsp;└─ Per‑collection depth (6 layers: Halle, Porsche, Audi, Decke, Ball, Hoop)<br>
+    Blender 5.1 (EEVEE) → Alpha beauty + Object‑ID + Normal map (1024×341)<br>
+    ComfyUI (localhost:8188) → ControlNet Depth SDXL → 3 editorial scenes (2.5–3 min each)
+    </code>
+  </div>
+</section>
+
+</div>
+
+<script>
+function radio(sel){
+  document.querySelectorAll(sel+' .ctrl-btn').forEach(b=>{
+    b.classList.remove('on');
+    const el=document.getElementById(b.dataset.id);
+    if(el)el.classList.remove('on');
+  });
+}
+
+// Analysis toggles (multi-select)
+document.querySelectorAll('#ana-grp .ctrl-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    this.classList.toggle('on');
+    document.getElementById(this.dataset.id).classList.toggle('on');
+  });
+});
+
+// Layer isolation toggles (multi-select)
+document.querySelectorAll('#layer-grp .ctrl-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    this.classList.toggle('on');
+    document.getElementById(this.dataset.id).classList.toggle('on');
+  });
+});
+</script>
+</body>
+</html>
