@@ -6,225 +6,225 @@
 <title>HTML TEST SPACE · felix schreiber</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%2300e5ff'/></svg>">
 <link rel="stylesheet" href="css/cursor.css">
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
 <style>
 :root{
-  --fs-base:clamp(.875rem,1.11vw,1.125rem);
-  --fs-sm:calc(var(--fs-base)*.75);
-  --fs-lg:clamp(1.25rem,2.5vw,1.75rem);
-  --c:#00e5ff;
-  --c08:rgba(0,229,255,.08);
-  --c12:rgba(0,229,255,.12);
-  --c18:rgba(0,229,255,.18);
-  --c25:rgba(0,229,255,.25);
-  --c35:rgba(0,229,255,.35);
-  --c50:rgba(0,229,255,.5);
-  --bg1:#f7f6f4;
-  --bg2:#ece8df;
-  --bg3:#e2ded6;
+  --fs-sm:clamp(.7rem,.9vw,.8rem);--fs-lg:clamp(1.25rem,2.5vw,1.75rem);
+  --c:#00e5ff;--c08:rgba(0,229,255,.08);--c12:rgba(0,229,255,.12);
+  --c18:rgba(0,229,255,.18);--c25:rgba(0,229,255,.25);--c35:rgba(0,229,255,.35);
+  --bg1:#f7f6f4;--bg2:#ece8df;--bg3:#e2ded6;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;background:var(--bg1)}
 body{
-  font-family:system-ui,-apple-system,sans-serif;
-  color:#2c2c2c;
-  background:var(--bg1);
-  line-height:1.8;
-  font-weight:300;
-  font-size:var(--fs-base);
-  -webkit-font-smoothing:antialiased;
+  font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;
+  background:var(--bg1);line-height:1.8;font-weight:300;
+  font-size:clamp(.875rem,1.11vw,1.125rem);-webkit-font-smoothing:antialiased;
 }
 
-/* — navbar — */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
-  background:#fff;
-  border-bottom:1px solid #e8e8ec;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;height:52px;
-  font-size:var(--fs-sm);
-}
-.nav-logo{font-weight:500;color:#1a1a1a;letter-spacing:.06em;text-decoration:none;border:none}
+/* nav */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff;border-bottom:1px solid #e8e8ec;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;font-size:var(--fs-sm)}
+.nav-logo{font-weight:500;color:#1a1a1a;letter-spacing:.06em;text-decoration:none}
 .nav-logo span{color:var(--c);font-weight:300}
-.nav-links{display:flex;gap:1.5rem;list-style:none}
-.nav-links a{
-  color:#888;text-decoration:none;border:none;
-  letter-spacing:.06em;transition:color .2s;
-  font-weight:350;
-}
+.nav-links{display:flex;gap:1.2rem;list-style:none;flex-wrap:wrap}
+.nav-links a{color:#888;text-decoration:none;letter-spacing:.06em;transition:color .2s;font-size:11px}
 .nav-links a:hover{color:#1a1a1a}
 
+/* sections */
 section{padding:5rem 0}
 section:first-of-type{padding-top:calc(5rem + 52px)}
-.inner{max-width:860px;margin:0 auto;padding:0 1.5rem}
+.sec-inner{max-width:860px;margin:0 auto;padding:0 1.5rem}
+.sec-label{font-size:10px;color:var(--c);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.25rem;font-weight:400}
+.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#1a1a1a;margin-bottom:.8rem}
+.sec-title::after{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,var(--c),transparent);margin:.6rem 0 1.2rem}
+.sec-desc{color:#777;margin-bottom:2rem;max-width:600px;font-size:.9rem}
 
-/* — hero — */
+/* hero */
 .hero{text-align:center;padding:6rem 0 4rem}
 .hero h1{font-weight:200;letter-spacing:.1em;font-size:clamp(1.8rem,4vw,3rem);color:#1a1a1a}
 .hero h1 span{color:var(--c)}
 .hero .sub{color:#666;font-size:var(--fs-sm);letter-spacing:.12em;margin-top:.75rem}
 
-/* — sec header — */
-.sec-label{font-size:10px;color:var(--c);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.25rem;font-weight:400}
-.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#1a1a1a;margin-bottom:2rem}
-.sec-title::after{content:'';display:block;width:100%;height:1px;background:linear-gradient(90deg,var(--c),transparent);margin:.6rem 0 0}
-.sec-desc{color:#777;margin-bottom:2.5rem;max-width:600px}
-
-/* — icon grid — */
+/* icon grid */
 .icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
-.icon-tile{
-  display:flex;align-items:center;justify-content:center;
-  padding:1.25rem;background:var(--bg2);border-radius:3px;
-  border:1px solid #e8e6e0;
-  transition:border-color .2s;
-}
+.icon-tile{display:flex;align-items:center;justify-content:center;padding:1.25rem;background:var(--bg2);border-radius:3px;border:1px solid #e8e6e0;transition:border-color .2s}
 .icon-tile:hover{border-color:var(--c25)}
+.icon{width:72px;height:72px;border-radius:50%;position:relative;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%)}
 
-/* icon base — 72px circle */
-.icon{
-  width:72px;height:72px;
-  border-radius:50%;position:relative;overflow:hidden;
-  flex-shrink:0;
-  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
-}
-
-/* — video circle — */
+/* video */
 .video-showcase{display:flex;gap:2rem;align-items:center;justify-content:center;flex-wrap:wrap;padding:2rem 0}
-.video-circle{
-  border-radius:50%;overflow:hidden;position:relative;
-  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
-}
+.video-circle{border-radius:50%;overflow:hidden;position:relative;background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%)}
 .video-circle video{width:100%;height:100%;object-fit:cover;display:block}
-.vid-sm{width:72px;height:72px}
-.vid-md{width:120px;height:120px}
-.vid-lg{width:200px;height:200px}
+.vid-sm{width:72px;height:72px}.vid-md{width:120px;height:120px}.vid-lg{width:200px;height:200px}
 
-/* — cursor demo — */
-.cursor-demo-area{
-  padding:3rem 2rem;background:var(--bg2);border-radius:6px;
-  border:1px dashed var(--c18);
-  text-align:center;
-  transition:border-color .3s;
-}
+/* cursor */
+.cursor-demo-area{padding:3rem 2rem;background:var(--bg2);border-radius:6px;border:1px dashed var(--c18);text-align:center;transition:border-color .3s;margin:2rem 0}
 .cursor-demo-area:hover{border-color:var(--c35)}
-.cursor-demo-area .hint{color:#777;font-size:var(--fs-sm);letter-spacing:.08em}
+.cursor-demo-area .hint{color:#777;font-size:var(--fs-sm);letter-spacing:.08em;line-height:2}
 .cursor-demo-area .glow{color:var(--c);font-weight:400}
 
-/* — metrics — */
+/* metrics */
 .metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2rem 0}
-.metric{text-align:center}
-.metric .num{font-size:2rem;font-weight:200;color:var(--c);letter-spacing:.04em}
+.metric{text-align:center}.metric .num{font-size:2rem;font-weight:200;color:var(--c);letter-spacing:.04em}
 .metric .label{font-size:10px;color:#666;letter-spacing:.12em;text-transform:uppercase;margin-top:.25rem}
 
-/* — links — */
+/* ═══════ LAYER BREAK CANVAS ═══════ */
+.lb-canvas-wrap{max-width:700px;margin:0 auto 1.5rem;border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:#111}
+.lb-canvas{position:relative;width:100%;aspect-ratio:1/1}
+.lb-canvas img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.lb-canvas .ly{opacity:0;pointer-events:none;transition:opacity .3s}
+.lb-canvas .ly.on{opacity:1}
+.lb-canvas .ly.ana-depth.on{mix-blend-mode:screen}
+.lb-canvas .ly.ana-norm.on{mix-blend-mode:overlay}
+.lb-canvas .ly.ana-objs.on{mix-blend-mode:screen}
+.ctrl-section{margin-bottom:.8rem}
+.ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
+.ctrl-row{display:flex;gap:.35rem;flex-wrap:wrap}
+.ctrl-btn{display:inline-flex;align-items:center;gap:.25rem;padding:.4rem .65rem;border:1px solid #e0ddd6;border-radius:3px;font-size:10px;letter-spacing:.04em;color:#888;background:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.ctrl-btn:hover{border-color:var(--c25);color:#555}
+.ctrl-btn.on{border-color:var(--c);color:var(--c);background:var(--c08)}
+.ctrl-btn .dot{width:5px;height:5px;border-radius:50%;background:#ccc;flex-shrink:0}
+.ctrl-btn.on .dot{background:var(--c)}
+
+/* scene cards */
+.scene-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+.scene-card{border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:#fff;transition:border-color .3s,transform .2s}
+.scene-card:hover{border-color:var(--c25);transform:translateY(-1px)}
+.scene-card img{width:100%;height:auto;display:block}
+.scene-card .meta{padding:.7rem .8rem;border-top:1px solid #f0ede7}
+.scene-card .meta-title{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:.15rem}
+.scene-card .meta-prompt{font-size:10px;color:#aaa;line-height:1.5;max-height:2.7em;overflow:hidden}
+
+/* panos */
+.pano-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:1100px;margin:0 auto;padding:0 1.5rem}
+.pano-card{background:var(--bg2);border-radius:4px;overflow:hidden;border:1px solid #e8e6e0}
+.pano-card a-scene{width:100%!important;height:35vh!important;display:block!important}
+.pano-tag{padding:.75rem 1rem;color:#666;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.pano-tag strong{color:#2c2c2c;font-weight:400}
+.a-enter-vr,.a-orientation-modal{display:none!important}
+
+/* pipeline */
+.flow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:1.5rem 0;font-size:11px;letter-spacing:.05em}
+.flow .step{padding:.3rem .6rem;border:1px solid var(--c18);border-radius:4px;color:var(--c);white-space:nowrap}
+.flow .arr{color:#bbb;font-size:14px}
+
+.doc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin:1.5rem 0}
+.doc-row{background:var(--bg2);border:1px solid #e0ddd6;border-radius:4px;padding:1rem}
+.doc-row h4{font-weight:500;font-size:12px;color:#1a1a1a;margin-bottom:.25rem}
+.doc-row .v{color:#888;font-size:11px;letter-spacing:.03em;line-height:1.6}
+
+/* stats */
+.scene-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.4rem;margin-bottom:1.5rem}
+.stat-item{padding:.5rem .6rem;border:1px solid #e0ddd6;border-radius:3px;background:#fff}
+.stat-value{font-size:1.2rem;font-weight:300;color:var(--c);letter-spacing:.02em}
+.stat-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:.06em}
+
+code{background:var(--bg3);padding:.15em .4em;border-radius:2px;font-size:.9em;color:var(--c)}
 a{color:var(--c);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s}
 a:hover{border-bottom-color:var(--c)}
 
-/* — more bar (subpage link) — */
-.more-bar{
-  display:flex;align-items:center;
-  width:33vw;height:5vh;
-  margin:2rem auto 0;
-  text-decoration:none;border:none;
-  color:#666;font-size:var(--fs-sm);letter-spacing:.1em;
-  border-top:1px solid #e8e6e0;
-  transition:color .2s,border-color .2s;
-}
-.more-bar:hover{color:var(--c);border-color:var(--c25)}
+.footer{text-align:center;padding:4rem 0 2rem;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
 
-/* — footer — */
-.footer{text-align:center;padding:4rem 0;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
+.vr-note{text-align:center;color:#999;font-size:11px;letter-spacing:.06em;margin-top:.5rem}
 
-/* ================================================
-   CSS ICONS — cyan edition
-   Same geometry, cyan palette
-   ================================================ */
-
-/* fea1 — Stress Cone */
-.fe1::before{content:'';position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 30deg,transparent 0deg,var(--c12) 40deg,transparent 80deg,var(--c18) 120deg,transparent 160deg,var(--c12) 200deg,transparent 240deg,var(--c08) 280deg,transparent 320deg,var(--c12) 360deg)}
-.fe1::after{content:'';position:absolute;top:14px;left:14px;right:14px;bottom:14px;border-radius:50%;border:1.5px solid var(--c35);box-shadow:0 0 0 4px rgba(0,229,255,.04),0 0 0 10px rgba(0,229,255,.03)}
-.fe1 n{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--c);opacity:.5}
-.fe1 n.t{top:14px;left:50%;transform:translateX(-50%)}.fe1 n.r{top:50%;right:14px;transform:translateY(-50%)}
-.fe1 n.b{bottom:14px;left:50%;transform:translateX(-50%)}.fe1 n.l{top:50%;left:14px;transform:translateY(-50%)}
-
-/* fea3 — Force Convergence */
-.fe3::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--c25)}
-.fe3::after{content:'';position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--c);opacity:.5;transform:translate(-50%,-50%)}
-.fe3 a{position:absolute;width:2px;height:14px;background:var(--c);opacity:.35;top:50%;left:50%;transform-origin:center center}
-.fe3 a:nth-child(1){transform:translate(-50%,-50%) rotate(0deg) translateY(-16px)}.fe3 a:nth-child(2){transform:translate(-50%,-50%) rotate(60deg) translateY(-16px)}.fe3 a:nth-child(3){transform:translate(-50%,-50%) rotate(120deg) translateY(-16px)}.fe3 a:nth-child(4){transform:translate(-50%,-50%) rotate(180deg) translateY(-16px)}.fe3 a:nth-child(5){transform:translate(-50%,-50%) rotate(240deg) translateY(-16px)}.fe3 a:nth-child(6){transform:translate(-50%,-50%) rotate(300deg) translateY(-16px)}
-
-/* fea6 — Fracture Analysis */
-.fe6::before{content:'';position:absolute;top:14px;left:50%;width:2px;height:18px;background:var(--c35);transform:translateX(-50%)}
-.fe6::after{content:'';position:absolute;top:30px;left:28px;width:16px;height:2px;background:var(--c25)}
-.fe6 z{position:absolute;width:2px;height:8px;background:var(--c);border-radius:1px}
-.fe6 z:nth-child(1){top:22px;left:44px;opacity:.4;transform:rotate(-30deg)}.fe6 z:nth-child(2){top:28px;left:48px;opacity:.25;transform:rotate(20deg);height:6px}.fe6 z:nth-child(3){top:34px;left:22px;opacity:.3;transform:rotate(-15deg)}
-.fe6 f{position:absolute;top:14px;left:50%;width:6px;height:6px;border-radius:50%;background:var(--c);opacity:.5;transform:translateX(-50%)}
-
-/* am1 — Layered Radial */
+/* ═══════ ALL 53 CSS ICONS ═══════ */
+.fea1::before{content:'';position:absolute;inset:6px;border-radius:50%;background:conic-gradient(from 30deg,transparent 0deg,var(--c12) 40deg,transparent 80deg,var(--c18) 120deg,transparent 160deg,var(--c12) 200deg,transparent 240deg,var(--c08) 280deg,transparent 320deg,var(--c12) 360deg)}
+.fea1::after{content:'';position:absolute;top:14px;left:14px;right:14px;bottom:14px;border-radius:50%;border:1.5px solid var(--c35);box-shadow:0 0 0 4px rgba(0,229,255,.04),0 0 0 10px rgba(0,229,255,.03)}
+.fea1 n{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--c);opacity:.5}
+.fea1 n.t{top:14px;left:50%;transform:translateX(-50%)}.fea1 n.r{top:50%;right:14px;transform:translateY(-50%)}
+.fea1 n.b{bottom:14px;left:50%;transform:translateX(-50%)}.fea1 n.l{top:50%;left:14px;transform:translateY(-50%)}
+.fea2::before{content:'';position:absolute;inset:8px;border-radius:50%;background:repeating-conic-gradient(var(--c12) 0deg 2deg,transparent 2deg 12deg) 50%/100% 100% no-repeat,repeating-conic-gradient(var(--c12) 0deg 2deg,transparent 2deg 12deg) 50%/80% 80% no-repeat;mask:radial-gradient(circle,black 60%,transparent 62%);-webkit-mask:radial-gradient(circle,black 60%,transparent 62%)}
+.fea2::after{content:'';position:absolute;inset:16px;border-radius:50%;border:1.5px solid var(--c25)}
+.fea3::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--c25)}
+.fea3::after{content:'';position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--c);opacity:.5;transform:translate(-50%,-50%)}
+.fea3 a{position:absolute;width:2px;height:14px;background:var(--c);opacity:.35;top:50%;left:50%;transform-origin:center center}
+.fea3 a:nth-child(1){transform:translate(-50%,-50%) rotate(0deg) translateY(-16px)}.fea3 a:nth-child(2){transform:translate(-50%,-50%) rotate(60deg) translateY(-16px)}.fea3 a:nth-child(3){transform:translate(-50%,-50%) rotate(120deg) translateY(-16px)}.fea3 a:nth-child(4){transform:translate(-50%,-50%) rotate(180deg) translateY(-16px)}.fea3 a:nth-child(5){transform:translate(-50%,-50%) rotate(240deg) translateY(-16px)}.fea3 a:nth-child(6){transform:translate(-50%,-50%) rotate(300deg) translateY(-16px)}
+.fea4::before{content:'';position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 30% 40%,var(--c35) 0%,var(--c18) 30%,var(--c08) 60%,transparent 100%)}
+.fea4::after{content:'';position:absolute;inset:14px;border-radius:50%;border:1.5px dashed var(--c25)}
+.fea4 d{position:absolute;border-radius:50%;border:1px solid var(--c18)}.fea4 d:nth-child(1){inset:18px}.fea4 d:nth-child(2){inset:26px;border-style:dashed}
+.fea5{background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%)}
+.fea5::before{content:'';position:absolute;inset:10px 20px;background:repeating-linear-gradient(0deg,var(--c12) 0px,var(--c12) 1.5px,transparent 1.5px,transparent 5px);border-radius:50%}
+.fea5::after{content:'';position:absolute;inset:16px;border-radius:50%;border:1.5px solid var(--c35)}
+.fea5 c{position:absolute;top:50%;left:28px;width:2px;height:18px;background:var(--c);opacity:.4;transform:translateY(-50%)}
+.fea5 c:nth-child(2){left:auto;right:28px}
+.fea6{background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%)}
+.fea6::before{content:'';position:absolute;top:14px;left:50%;width:2px;height:18px;background:var(--c35);transform:translateX(-50%)}
+.fea6::after{content:'';position:absolute;top:30px;left:28px;width:16px;height:2px;background:var(--c25)}
+.fea6 z{position:absolute;width:2px;height:8px;background:var(--c);border-radius:1px}
+.fea6 z:nth-child(1){top:22px;left:44px;opacity:.4;transform:rotate(-30deg)}.fea6 z:nth-child(2){top:28px;left:48px;opacity:.25;transform:rotate(20deg);height:6px}.fea6 z:nth-child(3){top:34px;left:22px;opacity:.3;transform:rotate(-15deg)}
+.fea6 f{position:absolute;top:14px;left:50%;width:6px;height:6px;border-radius:50%;background:var(--c);opacity:.5;transform:translateX(-50%)}
 .am1::before{content:'';position:absolute;inset:12px;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%,transparent,transparent 3px,var(--c12) 3px,var(--c12) 4px)}
 .am1::after{content:'';position:absolute;top:18px;left:18px;right:18px;bottom:18px;border-radius:50%;border:1.5px solid var(--c25)}
 .am1 l{position:absolute;left:50%;transform:translateX(-50%);border-radius:2px;background:var(--c)}
 .am1 l:nth-child(1){top:10px;width:2px;height:12px;opacity:.25}.am1 l:nth-child(2){top:28px;width:3px;height:16px;opacity:.4}.am1 l:nth-child(3){bottom:10px;width:2px;height:10px;opacity:.2}
-
-/* am6 — Honeycomb Infill */
+.am2{background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%)}
+.am2 l{position:absolute;left:12px;right:12px;height:3px;border-radius:1.5px;background:var(--c)}
+.am2 l:nth-child(1){top:12px;opacity:.15}.am2 l:nth-child(2){top:22px;opacity:.2}.am2 l:nth-child(3){top:32px;opacity:.3;height:4px}.am2 l:nth-child(4){top:42px;opacity:.35;height:4px}.am2 l:nth-child(5){top:50px;opacity:.4;height:5px}.am2 l:nth-child(6){top:58px;opacity:.25}
+.am3::before{content:'';position:absolute;inset:10px;border-radius:50%;background:conic-gradient(from 0deg,var(--c08) 0deg,var(--c18) 90deg,var(--c25) 180deg,var(--c18) 270deg,var(--c08) 360deg)}
+.am3::after{content:'';position:absolute;inset:18px;border-radius:50%;border:1.5px solid var(--c35)}
+.am3 p{position:absolute;top:50%;left:50%;width:4px;height:4px;border-radius:50%;background:var(--c);opacity:.6;transform:translate(-50%,-50%)}
+.am4::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(45deg,var(--c12) 0px,var(--c12) 1px,transparent 1px,transparent 6px),repeating-linear-gradient(-45deg,var(--c12) 0px,var(--c12) 1px,transparent 1px,transparent 6px);mask:radial-gradient(circle,black 50%,transparent 55%);-webkit-mask:radial-gradient(circle,black 50%,transparent 55%)}
+.am4::after{content:'';position:absolute;inset:16px;border-radius:50%;border:1.5px solid var(--c25)}
+.am5{background:linear-gradient(180deg,var(--bg1) 0%,var(--bg2) 100%)}
+.am5::before{content:'';position:absolute;top:16px;left:50%;width:10px;height:16px;background:var(--c12);border:1.5px solid var(--c25);border-radius:3px 3px 1px 1px;transform:translateX(-50%)}
+.am5::after{content:'';position:absolute;top:30px;left:50%;width:4px;height:14px;background:var(--c);opacity:.4;transform:translateX(-50%);border-radius:0 0 2px 2px}
+.am5 d{position:absolute;top:46px;left:50%;width:2px;height:10px;background:var(--c);opacity:.6;transform:translateX(-50%)}
+.am5 d:nth-child(2){width:6px;height:2px;top:42px;opacity:.25}
 .am6::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(60deg,var(--c12) 0px,var(--c12) 1px,transparent 1px,transparent 8px),repeating-linear-gradient(-60deg,var(--c12) 0px,var(--c12) 1px,transparent 1px,transparent 8px),repeating-linear-gradient(0deg,var(--c08) 0px,var(--c08) 1px,transparent 1px,transparent 8px);mask:radial-gradient(circle,black 55%,transparent 58%);-webkit-mask:radial-gradient(circle,black 55%,transparent 58%)}
 .am6::after{content:'';position:absolute;inset:14px;border-radius:50%;border:1.5px solid var(--c25)}
-
-/* mac1 — App Window */
 .mc1::before{content:'';position:absolute;top:14px;left:12px;right:12px;bottom:14px;border-radius:6px;background:var(--c08);border:1.5px solid rgba(0,229,255,.2)}
 .mc1::after{content:'';position:absolute;top:19px;left:18px;width:6px;height:6px;border-radius:50%;background:var(--c35);box-shadow:12px 0 0 var(--c12),24px 0 0 var(--c12)}
 .mc1 c{position:absolute;left:19px;right:6px;height:3px;border-radius:2px;background:var(--c18)}
 .mc1 c:nth-child(1){top:31px;right:16px}.mc1 c:nth-child(2){top:39px;right:18px;width:8px}
+.mc2{background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%)}
+.mc2::before{content:'';position:absolute;top:14px;left:16px;width:18px;height:24px;border-radius:8px;border:2px solid var(--c25);transform:rotate(-8deg)}
+.mc2::after{content:'';position:absolute;top:18px;right:16px;width:14px;height:18px;border-radius:6px;background:var(--c12);border:2px solid var(--c35);transform:rotate(6deg)}
+.mc2 s{position:absolute;top:50%;left:32px;width:10px;height:2px;border-radius:1px;background:var(--c35);transform:translateY(-50%) rotate(-8deg)}
+.mc3::before{content:'';position:absolute;inset:12px;border-radius:50%;border:1.5px solid var(--c25)}
+.mc3::after{content:'>_';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:monospace;font-size:14px;font-weight:400;color:var(--c);opacity:.5;letter-spacing:.04em}
+.mc3 c{position:absolute;width:16px;height:2px;border-radius:1px;background:var(--c18)}
+.mc3 c:nth-child(1){top:24px;left:22px}.mc3 c:nth-child(2){top:38px;left:22px;width:10px}
+.mc4::before{content:'';position:absolute;top:16px;left:16px;width:16px;height:16px;border-radius:5px;background:var(--c12);border:1.5px solid var(--c25)}
+.mc4::after{content:'';position:absolute;top:28px;right:20px;width:10px;height:10px;border-radius:3px;background:var(--c08);border:1.5px solid var(--c25)}
+.mc4 d{position:absolute;top:40px;left:18px;width:8px;height:8px;border-radius:3px;border:1.5px solid var(--c18)}
+.mc5{background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%)}
+.mc5::before{content:'';position:absolute;top:18px;left:20px;width:28px;height:28px;border-radius:8px;border:1.5px solid var(--c25);background:var(--c08)}
+.mc5::after{content:'';position:absolute;top:26px;left:29px;width:0;height:0;border-top:7px solid transparent;border-bottom:7px solid transparent;border-left:10px solid var(--c);opacity:.5}
+.mc5 c{position:absolute;top:22px;left:22px;width:4px;height:5px;border-radius:2px;background:var(--c);opacity:.25}
+.mc5 c:nth-child(2){left:30px}.mc5 c:nth-child(3){left:38px;width:5px}
+.mc6{background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%)}
+.mc6::before{content:'';position:absolute;top:18px;left:24px;width:14px;height:14px;border-radius:4px;border:1.5px solid var(--c25);background:var(--c12)}
+.mc6::after{content:'';position:absolute;top:28px;left:34px;width:12px;height:12px;border-radius:3px;border:1.5px solid var(--c18);background:var(--c08)}
+.mc6 m{position:absolute;top:34px;left:18px;width:10px;height:10px;border-radius:3px;border:1.5px solid var(--c18)}
+.mc6 m:nth-child(2){top:16px;left:40px;width:10px;height:8px;border-radius:3px;border:1.5px solid var(--c25);background:var(--c08)}
+.mc6 m:nth-child(3){top:24px;left:42px;width:1px;height:10px;background:var(--c25);transform:rotate(30deg)}
+.mc6 m:nth-child(4){top:30px;left:22px;width:1px;height:8px;background:var(--c18);transform:rotate(-30deg)}
+.ci1::before{content:'';position:absolute;inset:10px;border-radius:50%;border:1.5px dashed var(--c18);animation:spin 12s linear infinite}
+.ci1::after{content:'';position:absolute;top:50%;left:50%;width:14px;height:14px;border-radius:50%;background:var(--c);opacity:.3;transform:translate(-50%,-50%)}
+.ci1 a{position:absolute;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:7px solid var(--c)}
+.ci1 a:nth-child(1){top:18px;left:50%;transform:translateX(-50%) rotate(180deg);opacity:.35}
+.ci1 a:nth-child(2){top:38px;left:50%;transform:translateX(-50%);opacity:.55}
+.ci2{background:linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%)}
+.ci2::before{content:'';position:absolute;top:14px;left:50%;width:1.5px;height:44px;background:var(--c25);transform:translateX(-50%)}
+.ci2::after{content:'';position:absolute;top:30px;left:50%;width:16px;height:1.5px;background:var(--c35);border-radius:1px}
+.ci2 d{position:absolute;width:7px;height:7px;border-radius:50%;border:1.5px solid var(--c)}
+.ci2 d:nth-child(1){top:14px;left:50%;transform:translateX(-50%);background:var(--c);opacity:.4}
+.ci2 d:nth-child(2){top:30px;left:36px}.ci2 d:nth-child(3){bottom:12px;left:50%;transform:translateX(-50%)}
+.ci3::before{content:'';position:absolute;inset:10px;border-radius:50%;background:conic-gradient(from 0deg,var(--c) 0deg,var(--c) 8deg,transparent 8deg,transparent 24deg,var(--c) 24deg,var(--c) 32deg,transparent 32deg,transparent 48deg,var(--c) 48deg,var(--c) 56deg,transparent 56deg,transparent 72deg,var(--c) 72deg,var(--c) 80deg,transparent 80deg,transparent 96deg,var(--c) 96deg,var(--c) 104deg,transparent 104deg,transparent 120deg,var(--c) 120deg,var(--c) 128deg,transparent 128deg,transparent 144deg,var(--c) 144deg,var(--c) 152deg,transparent 152deg,transparent 168deg,var(--c) 168deg,var(--c) 176deg,transparent 176deg,transparent 192deg,var(--c) 192deg,var(--c) 200deg,transparent 200deg,transparent 216deg,var(--c) 216deg,var(--c) 224deg,transparent 224deg,transparent 240deg,var(--c) 240deg,var(--c) 248deg,transparent 248deg,transparent 264deg,var(--c) 264deg,var(--c) 272deg,transparent 272deg,transparent 288deg,var(--c) 288deg,var(--c) 296deg,transparent 296deg,transparent 312deg,var(--c) 312deg,var(--c) 320deg,transparent 320deg,transparent 336deg,var(--c) 336deg,var(--c) 344deg,transparent 344deg,transparent 360deg);opacity:.5}
+.ci3::after{content:'';position:absolute;top:50%;left:50%;width:10px;height:10px;border-radius:50%;background:var(--c);opacity:.4;transform:translate(-50%,-50%)}
 
-/* ci1 — Pipeline Ring */
-.ci1::before{content:'';position:absolute;inset:8px;border-radius:50%;border:2px dashed var(--c18)}
-.ci1::after{content:'';position:absolute;inset:18px;border-radius:50%;border:1.5px solid var(--c25)}
-.ci1 a{position:absolute;width:3px;height:8px;background:var(--c);opacity:.4}
-.ci1 a:nth-child(1){top:8px;left:50%;transform:translateX(-50%)}
-.ci1 a:nth-child(2){top:8px;right:10px;transform:rotate(120deg)}
-
-/* ai2 — Neural Mesh */
-.ai2::before{content:'';position:absolute;inset:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--c18) 0%,transparent 40%),radial-gradient(circle at 70% 35%,var(--c12) 0%,transparent 30%),radial-gradient(circle at 25% 70%,var(--c25) 0%,transparent 35%),radial-gradient(circle at 65% 65%,var(--c12) 0%,transparent 25%),radial-gradient(circle at 50% 50%,var(--c35) 0%,transparent 20%),radial-gradient(circle at 15% 45%,var(--c08) 0%,transparent 20%),radial-gradient(circle at 80% 50%,var(--c08) 0%,transparent 15%),radial-gradient(circle at 45% 75%,var(--c12) 0%,transparent 18%)}
-.ai2::after{content:'';position:absolute;inset:16px;border-radius:50%;border:1.5px solid var(--c18)}
-
-/* ai5 — Weight Matrix */
-.ai5::before{content:'';position:absolute;inset:0;border-radius:50%;background:repeating-linear-gradient(0deg,var(--c08) 0px,var(--c08) 1px,transparent 1px,transparent 10px),repeating-linear-gradient(90deg,var(--c08) 0px,var(--c08) 1px,transparent 1px,transparent 10px);mask:radial-gradient(circle,black 55%,transparent 58%);-webkit-mask:radial-gradient(circle,black 55%,transparent 58%)}
-.ai5 w{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);opacity:.5}
-.ai5 w:nth-child(1){top:24px;left:24px}
-.ai5 w:nth-child(2){top:24px;right:28px}
-.ai5 w:nth-child(3){bottom:28px;left:32px}
-
-/* ds1 — Direction Compass */
-.ds1::before{content:'';position:absolute;inset:8px;border-radius:50%;border:1.5px solid var(--c25)}
-.ds1 p{position:absolute;top:50%;left:50%;width:2px;height:20px;background:var(--c);opacity:.5;transform:translate(-50%,-50%)}
-.ds1 p:last-child{width:20px;height:2px}
-.ds1 c{position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;background:var(--c);opacity:.7;transform:translate(-50%,-50%)}
-
-/* ds6 — Growth Spiral */
-.ds6::before{content:'';position:absolute;inset:10px;border-radius:50%;background:conic-gradient(from 0deg,var(--c08) 0deg,var(--c12) 60deg,var(--c18) 120deg,var(--c25) 180deg,var(--c35) 240deg,var(--c18) 300deg,var(--c08) 360deg)}
-.ds6::after{content:'';position:absolute;inset:18px;border-radius:50%;border:1.5px solid var(--c25)}
-.ds6 p{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);opacity:.6}
-.ds6 p:nth-child(1){top:18px;left:28px}
-.ds6 p:nth-child(2){bottom:20px;right:26px}
-
-/* rx-ll — Local LLM */
-.rxll::before{content:'';position:absolute;top:16px;left:18px;right:18px;bottom:20px;border:1.5px solid var(--c25);border-radius:3px}
-.rxll::after{content:'';position:absolute;top:22px;left:24px;width:8px;height:8px;border-radius:2px;background:var(--c35)}
-.rxll l{position:absolute;bottom:16px;left:22px;right:22px;height:2px;border-radius:1px;background:var(--c18)}
-.rxll l:nth-child(2){bottom:18px;height:2px}
-.rxll s{position:absolute;top:24px;right:20px;width:16px;height:9px;border:1.5px solid var(--c18);border-radius:0 0 3px 3px;border-top:none}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:768px){
-  .nav{padding:0 1rem}
-  .nav-links{gap:.75rem;font-size:11px}
+  .nav{padding:0 1rem}.nav-links{gap:.6rem}
   .icon-grid{grid-template-columns:repeat(2,1fr)}
-  .video-showcase{gap:1rem}
-  .metric-row{grid-template-columns:1fr;gap:1rem}
+  .video-showcase{gap:1rem}.metric-row{grid-template-columns:1fr;gap:1rem}
+  .pano-grid,.doc-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- cursor element -->
 <div id="cur"><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div></div>
 
 <!-- ═══════ NAV ═══════ -->
@@ -234,102 +234,237 @@ a:hover{border-bottom-color:var(--c)}
 <li><a href="#icons">Icons</a></li>
 <li><a href="#video">Video</a></li>
 <li><a href="#cursor">Cursor</a></li>
-<li><a href="layerbreak.html">Layerbreak</a></li>
-<li><a href="halle_layerbreak.html">HALLE 2</a></li>
-<li><a href="afz_layerbreak.html">AFZ</a></li>
+<li><a href="#layerbreaks">Layer Breaks</a></li>
+<li><a href="#panos">Panos</a></li>
+<li><a href="#pipeline">Pipeline</a></li>
 </ul>
 </nav>
 
 <!-- ═══════ HERO ═══════ -->
 <section class="hero">
 <h1>HTML <span>TEST</span> SPACE</h1>
-<p class="sub">prototypes · demos · experiments</p>
+<p class="sub">prototypes · demos · experiments · 53 icons · 3 layer breaks · 2 panoramas</p>
 </section>
 
 <!-- ═══════ CSS ICONS ═══════ -->
 <section id="icons">
-<div class="inner">
+<div class="sec-inner">
 <div class="sec-label">prototypes</div>
 <h2 class="sec-title">CSS Capability Icons</h2>
-<p class="sec-desc">53 pure-CSS circular icons. Zero images, zero fonts, zero external assets. Single concept → basic geometry → 3 layers (::before / ::after / child nodes). Accent-only palette — no other colors.</p>
-
+<p class="sec-desc">53 pure-CSS circular icons. Zero images, zero fonts, zero external assets. Single concept → basic geometry → 3 layers (::before / ::after / child nodes). Accent-only palette.</p>
+</div>
+<div class="sec-inner" style="max-width:760px">
+<div style="font-size:11px;color:#888;letter-spacing:.08em;margin-bottom:.75rem">FEA · Additive · macOS · CI/CD · Comms · AI · Strategy · Individual</div>
 <div class="icon-grid">
-<div class="icon-tile"><div class="icon fe1"><n class="t"></n><n class="r"></n><n class="b"></n><n class="l"></n></div></div>
-<div class="icon-tile"><div class="icon fe3"><a></a><a></a><a></a><a></a><a></a><a></a></div></div>
-<div class="icon-tile"><div class="icon fe6"><z></z><z></z><z></z><f></f></div></div>
+<div class="icon-tile"><div class="icon fea1"><n class="t"></n><n class="r"></n><n class="b"></n><n class="l"></n></div></div>
+<div class="icon-tile"><div class="icon fea2"></div></div>
+<div class="icon-tile"><div class="icon fea3"><a></a><a></a><a></a><a></a><a></a><a></a></div></div>
+<div class="icon-tile"><div class="icon fea4"><d></d><d></d></div></div>
+<div class="icon-tile"><div class="icon fea5"><c></c><c></c></div></div>
+<div class="icon-tile"><div class="icon fea6"><z></z><z></z><z></z><f></f></div></div>
 <div class="icon-tile"><div class="icon am1"><l></l><l></l><l></l></div></div>
-
+<div class="icon-tile"><div class="icon am2"><l></l><l></l><l></l><l></l><l></l><l></l></div></div>
+<div class="icon-tile"><div class="icon am3"><p></p></div></div>
+<div class="icon-tile"><div class="icon am4"></div></div>
+<div class="icon-tile"><div class="icon am5"><d></d><d></d></div></div>
 <div class="icon-tile"><div class="icon am6"></div></div>
 <div class="icon-tile"><div class="icon mc1"><c></c><c></c></div></div>
+<div class="icon-tile"><div class="icon mc2"><s></s></div></div>
+<div class="icon-tile"><div class="icon mc3"><c></c><c></c></div></div>
+<div class="icon-tile"><div class="icon mc4"><d></d></div></div>
+<div class="icon-tile"><div class="icon mc5"><c></c><c></c><c></c></div></div>
+<div class="icon-tile"><div class="icon mc6"><m></m><m></m><m></m><m></m></div></div>
 <div class="icon-tile"><div class="icon ci1"><a></a><a></a></div></div>
-<div class="icon-tile"><div class="icon ai2"></div></div>
-
-<div class="icon-tile"><div class="icon ai5"><w></w><w></w><w></w></div></div>
-<div class="icon-tile"><div class="icon ds1"><p></p><p></p><c></c></div></div>
-<div class="icon-tile"><div class="icon ds6"><p></p><p></p></div></div>
-  <div class="icon-tile"><div class="icon rxll"><l></l><l></l><s></s></div></div>
+<div class="icon-tile"><div class="icon ci2"><d></d><d></d><d></d></div></div>
+<div class="icon-tile"><div class="icon ci3"></div></div>
 </div>
 </div>
-<a href="icons.html" class="more-bar">(more)</a>
 </section>
 
-<!-- ═══════ VIDEO CIRCLE ═══════ -->
+<!-- ═══════ VIDEO ═══════ -->
 <section id="video" style="background:var(--bg2)">
-<div class="inner">
+<div class="sec-inner">
 <div class="sec-label">demo</div>
 <h2 class="sec-title">Video Circle</h2>
-<p class="sec-desc">Timeline 1.mp4 — 1000×1000 H.265 16fps 30s loop. Rendered as a circular web object via <code>border-radius:50%</code> + <code>object-fit:cover</code>. No JS, no canvas, no transcode.</p>
-
+<p class="sec-desc">Timeline 1.mp4 — 1000×1000 H.265 16fps 30s loop. Rendered as a circular web object via <code>border-radius:50%</code> + <code>object-fit:cover</code>.</p>
 <div class="video-showcase" data-drag="true">
 <div class="video-circle vid-sm"><video src="images/timeline_1.mp4" autoplay loop muted playsinline></video></div>
 <div class="video-circle vid-md"><video src="images/timeline_1.mp4" autoplay loop muted playsinline></video></div>
 <div class="video-circle vid-lg"><video src="images/timeline_1.mp4" autoplay loop muted playsinline></video></div>
 </div>
-
-<div class="metric-row" style="margin-top:2rem">
-<div class="metric"><div class="num">30s</div><div class="label">loop duration</div></div>
-<div class="metric"><div class="num">16</div><div class="label">frames / sec</div></div>
-<div class="metric"><div class="num">2.3</div><div class="label">MB · H.265</div></div>
+<div class="metric-row"><div class="metric"><div class="num">30s</div><div class="label">loop</div></div><div class="metric"><div class="num">16</div><div class="label">fps</div></div><div class="metric"><div class="num">2.3</div><div class="label">MB · H.265</div></div></div>
 </div>
-</div>
-<a href="video.html" class="more-bar">(more)</a>
 </section>
 
-<!-- ═══════ CUSTOM CURSOR ═══════ -->
+<!-- ═══════ CURSOR ═══════ -->
 <section id="cursor">
-<div class="inner">
+<div class="sec-inner">
 <div class="sec-label">interaction</div>
 <h2 class="sec-title">Custom Proximity Cursor</h2>
-<p class="sec-desc">A cursor that reacts to interactive elements. <span class="glow">Hovers</span> over links — <span class="glow">splits into 3 dots</span> over draggable zones with N-body physics. Pure CSS + vanilla JS, no dependencies.</p>
-
+<p class="sec-desc">Reacts to interactive elements. <span class="glow">Hovers</span> over links — <span class="glow">splits into 3 dots</span> over draggable zones with N-body physics.</p>
 <div class="cursor-demo-area" data-drag="true">
-<p class="hint">← drag across here to see the <span class="glow">cursor split</span> with physics</p>
-<p class="hint" style="margin-top:1rem"><a href="#icons">hover links</a> — <a href="#video">proximity glow</a> — <a href="#cursor">edge detection</a></p>
+<p class="hint">← drag across to see <span class="glow">cursor split</span> with physics</p>
+<p class="hint"><a href="#icons">hover links</a> — <a href="#video">proximity glow</a> — <a href="#cursor">edge detection</a></p>
 </div>
-
-<div class="metric-row" style="margin-top:2rem">
-<div class="metric"><div class="num">3</div><div class="label">physics dots</div></div>
-<div class="metric"><div class="num">N-body</div><div class="label">simulation</div></div>
-<div class="metric"><div class="num">&lt;1 KB</div><div class="label">gzipped JS</div></div>
-</div>
-</div>
-<a href="cursor.html" class="more-bar">(more)</a>
-</section>
-
-<!-- ═══════ ALSO ═══════ -->
-<section style="padding:3rem 0">
-<div class="inner" style="text-align:center">
-<div class="sec-label">view</div>
-<a href="panos.html" class="more-bar" style="width:auto;margin:0 auto">(panoramas)</a>
-<a href="layerbreak.html" class="more-bar" style="width:auto;margin:1rem auto 0">(layerbreak)</a>
+<div class="metric-row"><div class="metric"><div class="num">3</div><div class="label">physics dots</div></div><div class="metric"><div class="num">N-body</div><div class="label">simulation</div></div><div class="metric"><div class="num">&lt;1 KB</div><div class="label">gzipped JS</div></div></div>
 </div>
 </section>
 
-<!-- ═══════ FOOTER ═══════ -->
-<div class="footer">
-<a href="https://github.com/fxsrdp/html-test-space">fxsrdp/html-test-space</a> · felix schreiber · 2026
+<!-- ═══════ LAYER BREAKS ═══════ -->
+<section id="layerbreaks" style="background:var(--bg2)">
+<div class="sec-inner" style="max-width:800px">
+<div class="sec-label">depth-to-image</div>
+<h2 class="sec-title">Layer Breaks</h2>
+<p class="sec-desc">Product α‑mask → offline slice → env(z1) / analysis(z2) / product(z3). All layers carry embedded alpha. No CSS masks.</p>
 </div>
+
+<!-- LB 1: Gentle Monster -->
+<div class="sec-inner" style="max-width:800px;margin-bottom:3rem">
+<div style="margin-bottom:.3rem"><span style="font-size:12px;font-weight:500;color:#1a1a1a">Gentle Monster SG</span> <span style="font-size:10px;color:#999">— 21 meshes · 7 envs · 6 products</span></div>
+<div class="lb-canvas-wrap"><div class="lb-canvas" id="lb1-canvas">
+<img class="ly on" id="lb1-env-jungle" src="img/pipeline/sliced/env_jungle.png">
+<img class="ly" id="lb1-env-space" src="img/pipeline/sliced/env_space.png">
+<img class="ly" id="lb1-env-fashion" src="img/pipeline/sliced/env_fashion.png">
+<img class="ly" id="lb1-env-scifi" src="img/pipeline/sliced/env_scifi.png">
+<img class="ly" id="lb1-env-bubble" src="img/pipeline/sliced/env_bubble.png">
+<img class="ly" id="lb1-env-jv1" src="img/pipeline/sliced/env_junglev1.png">
+<img class="ly ana-depth" id="lb1-ly-depth" src="img/pipeline/gentle_monster_depth.png">
+<img class="ly ana-norm" id="lb1-ly-normals" src="img/pipeline/gentle_monster_normal.png">
+<img class="ly ana-objs" id="lb1-ly-objects" src="img/pipeline/gentle_monster_objects.png">
+<img class="ly on" id="lb1-sg-beauty" src="img/pipeline/sliced/product_beauty.png">
+<img class="ly" id="lb1-sg-jungle" src="img/pipeline/sliced/product_jungle.png">
+<img class="ly" id="lb1-sg-space" src="img/pipeline/sliced/product_space.png">
+<img class="ly" id="lb1-sg-fashion" src="img/pipeline/sliced/product_fashion.png">
+<img class="ly" id="lb1-sg-scifi" src="img/pipeline/sliced/product_scifi.png">
+<img class="ly" id="lb1-sg-bubble" src="img/pipeline/sliced/product_bubble.png">
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Environment</div><div class="ctrl-row" id="lb1-env-grp">
+<button class="ctrl-btn on" data-id="lb1-env-jungle"><span class="dot"></span>Jungle</button><button class="ctrl-btn" data-id="lb1-env-space"><span class="dot"></span>Space</button><button class="ctrl-btn" data-id="lb1-env-fashion"><span class="dot"></span>Fashion</button><button class="ctrl-btn" data-id="lb1-env-scifi"><span class="dot"></span>Sci-Fi</button><button class="ctrl-btn" data-id="lb1-env-bubble"><span class="dot"></span>Bubble</button><button class="ctrl-btn" data-id="lb1-env-jv1"><span class="dot"></span>Jungle v1</button>
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Product</div><div class="ctrl-row" id="lb1-sg-grp">
+<button class="ctrl-btn on" data-id="lb1-sg-beauty"><span class="dot"></span>Beauty</button><button class="ctrl-btn" data-id="lb1-sg-jungle"><span class="dot"></span>Jungle</button><button class="ctrl-btn" data-id="lb1-sg-space"><span class="dot"></span>Space</button><button class="ctrl-btn" data-id="lb1-sg-fashion"><span class="dot"></span>Fashion</button><button class="ctrl-btn" data-id="lb1-sg-scifi"><span class="dot"></span>Sci-Fi</button><button class="ctrl-btn" data-id="lb1-sg-bubble"><span class="dot"></span>Bubble</button>
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Analysis</div><div class="ctrl-row" id="lb1-ana-grp">
+<button class="ctrl-btn" data-id="lb1-ly-depth"><span class="dot"></span>Depth</button><button class="ctrl-btn" data-id="lb1-ly-normals"><span class="dot"></span>Normals</button><button class="ctrl-btn" data-id="lb1-ly-objects"><span class="dot"></span>Object IDs</button>
+</div></div>
+</div>
+
+<!-- LB 2: HALLE 2 -->
+<div class="sec-inner" style="max-width:800px;margin-bottom:3rem">
+<div style="margin-bottom:.3rem"><span style="font-size:12px;font-weight:500;color:#1a1a1a">HALLE 2</span> <span style="font-size:10px;color:#999">— 86 car meshes · Porsche 911 + Audi RS6 · 3 scenes</span></div>
+<div class="lb-canvas-wrap"><div class="lb-canvas" id="lb2-canvas">
+<img class="ly on" id="lb2-env-showroom" src="img/halle/sliced/env_showroom.png">
+<img class="ly" id="lb2-env-noir" src="img/halle/sliced/env_noir.png">
+<img class="ly" id="lb2-env-cyberpunk" src="img/halle/sliced/env_cyberpunk.png">
+<img class="ly ana-depth" id="lb2-ly-depth" src="img/halle/depth_sq.png">
+<img class="ly ana-norm" id="lb2-ly-normals" src="img/halle/normal.png">
+<img class="ly ana-objs" id="lb2-ly-objects" src="img/halle/objects.png">
+<img class="ly on" id="lb2-cars-beauty" src="img/halle/sliced/product_beauty.png">
+<img class="ly" id="lb2-cars-showroom" src="img/halle/sliced/product_showroom.png">
+<img class="ly" id="lb2-cars-noir" src="img/halle/sliced/product_noir.png">
+<img class="ly" id="lb2-cars-cyberpunk" src="img/halle/sliced/product_cyberpunk.png">
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Environment</div><div class="ctrl-row" id="lb2-env-grp">
+<button class="ctrl-btn on" data-id="lb2-env-showroom"><span class="dot"></span>Showroom</button><button class="ctrl-btn" data-id="lb2-env-noir"><span class="dot"></span>Noir</button><button class="ctrl-btn" data-id="lb2-env-cyberpunk"><span class="dot"></span>Cyberpunk</button>
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Product</div><div class="ctrl-row" id="lb2-cars-grp">
+<button class="ctrl-btn on" data-id="lb2-cars-beauty"><span class="dot"></span>Beauty</button><button class="ctrl-btn" data-id="lb2-cars-showroom"><span class="dot"></span>Showroom</button><button class="ctrl-btn" data-id="lb2-cars-noir"><span class="dot"></span>Noir</button><button class="ctrl-btn" data-id="lb2-cars-cyberpunk"><span class="dot"></span>Cyberpunk</button>
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Analysis</div><div class="ctrl-row" id="lb2-ana-grp">
+<button class="ctrl-btn" data-id="lb2-ly-depth"><span class="dot"></span>Depth</button><button class="ctrl-btn" data-id="lb2-ly-normals"><span class="dot"></span>Normals</button><button class="ctrl-btn" data-id="lb2-ly-objects"><span class="dot"></span>Object IDs</button>
+</div></div>
+</div>
+
+<!-- LB 3: AFZ -->
+<div class="sec-inner" style="max-width:800px">
+<div style="margin-bottom:.3rem"><span style="font-size:12px;font-weight:500;color:#1a1a1a">AFZ render</span> <span style="font-size:10px;color:#999">— 2 product meshes · 200mm · 4 scenes</span></div>
+<div class="lb-canvas-wrap"><div class="lb-canvas" id="lb3-canvas">
+<img class="ly on" id="lb3-env-beauty" src="img/afz/sliced/env_beauty.png">
+<img class="ly" id="lb3-env-studio" src="img/afz/sliced/env_studio.png">
+<img class="ly" id="lb3-env-dramatic" src="img/afz/sliced/env_dramatic.png">
+<img class="ly" id="lb3-env-brutalist" src="img/afz/sliced/env_brutalist.png">
+<img class="ly ana-depth" id="lb3-ly-depth" src="img/afz/depth_sq.png">
+<img class="ly ana-norm" id="lb3-ly-normals" src="img/afz/normal.png">
+<img class="ly ana-objs" id="lb3-ly-objects" src="img/afz/objects.png">
+<img class="ly on" id="lb3-prod-beauty" src="img/afz/sliced/product_beauty.png">
+<img class="ly" id="lb3-prod-studio" src="img/afz/sliced/product_studio.png">
+<img class="ly" id="lb3-prod-dramatic" src="img/afz/sliced/product_dramatic.png">
+<img class="ly" id="lb3-prod-brutalist" src="img/afz/sliced/product_brutalist.png">
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Environment</div><div class="ctrl-row" id="lb3-env-grp">
+<button class="ctrl-btn on" data-id="lb3-env-beauty"><span class="dot"></span>Beauty</button><button class="ctrl-btn" data-id="lb3-env-studio"><span class="dot"></span>Studio</button><button class="ctrl-btn" data-id="lb3-env-dramatic"><span class="dot"></span>Dramatic</button><button class="ctrl-btn" data-id="lb3-env-brutalist"><span class="dot"></span>Brutalist</button>
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Product</div><div class="ctrl-row" id="lb3-prod-grp">
+<button class="ctrl-btn on" data-id="lb3-prod-beauty"><span class="dot"></span>Beauty</button><button class="ctrl-btn" data-id="lb3-prod-studio"><span class="dot"></span>Studio</button><button class="ctrl-btn" data-id="lb3-prod-dramatic"><span class="dot"></span>Dramatic</button><button class="ctrl-btn" data-id="lb3-prod-brutalist"><span class="dot"></span>Brutalist</button>
+</div></div>
+<div class="ctrl-section"><div class="ctrl-label">Analysis</div><div class="ctrl-row" id="lb3-ana-grp">
+<button class="ctrl-btn" data-id="lb3-ly-depth"><span class="dot"></span>Depth</button><button class="ctrl-btn" data-id="lb3-ly-normals"><span class="dot"></span>Normals</button><button class="ctrl-btn" data-id="lb3-ly-objects"><span class="dot"></span>Object IDs</button>
+</div></div>
+</div>
+</section>
+
+<!-- ═══════ PANOS ═══════ -->
+<section id="panos">
+<div class="sec-inner"><div class="sec-label">immersive</div><h2 class="sec-title">360° Panoramas</h2><p class="sec-desc">A-Frame spherical documentation — drag to explore. Schattenzensus project documentation.</p></div>
+<div class="pano-grid">
+<div class="pano-card" data-drag="true">
+<a-scene embedded><a-camera wasd-controls-enabled="false" look-controls-enabled="true" position="0 0 0"></a-camera><a-sky src="images/spk-pano-gmaps3-hires-scaled.jpg" rotation="0 45 0"></a-sky></a-scene>
+<div class="pano-tag"><strong>Schattenzensus</strong> gmaps3</div>
+</div>
+<div class="pano-card" data-drag="true">
+<a-scene embedded><a-camera wasd-controls-enabled="false" look-controls-enabled="true" position="0 0 0"></a-camera><a-sky src="images/spk-pano-gmaps5-hires-scaled.jpg" rotation="0 60 0"></a-sky></a-scene>
+<div class="pano-tag"><strong>Schattenzensus</strong> gmaps5</div>
+</div>
+</div>
+<p class="vr-note">drag to look around · embedded A-Frame 1.6</p>
+</section>
+
+<!-- ═══════ PIPELINE ═══════ -->
+<section id="pipeline" style="background:var(--bg2)">
+<div class="sec-inner">
+<div class="sec-label">technique</div>
+<h2 class="sec-title">Depth-to-Image Pipeline</h2>
+<div class="flow">
+<span class="step">Blender 5.1</span><span class="arr">→</span><span class="step">Cycles Depth</span><span class="arr">→</span><span class="step">EXR→16-bit PNG</span><span class="arr">→</span><span class="step">Pad Square</span><span class="arr">→</span><span class="step">ComfyUI /upload/image</span><span class="arr">→</span><span class="step">ControlNet Depth</span><span class="arr">→</span><span class="step">SDXL KSampler</span><span class="arr">→</span><span class="step">Editorial Output</span>
+</div>
+<div class="doc-grid" style="margin-top:1.5rem">
+<div class="doc-row"><h4>Product α-Mask</h4><div class="v">Render subject meshes in isolation — EEVEE, film_transparent, 1024², HORIZONTAL sensor_fit. Export as RGBA PNG with embedded alpha.</div></div>
+<div class="doc-row"><h4>Full-Scene Depth</h4><div class="v">Cycles 128 samples, Z‑Pass → Normalize → Invert → EXR → 16‑bit PNG. Same camera settings as α‑mask for pixel-perfect overlay.</div></div>
+<div class="doc-row"><h4>SDXL Generation</h4><div class="v">ControlNet Depth SDXL (strength 0.85) + KSampler (dpmpp_2m karras, CFG 7.0, 20 steps) → 1024² editorial scenes. MPS ~3 min each.</div></div>
+<div class="doc-row"><h4>Offline α‑Slice</h4><div class="v">Python/Pillow: product mask × SDXL output → product_*.png. Inverted mask × SDXL → env_*.png. Beauty render sliced for base pass. All RGBA with embedded alpha.</div></div>
+<div class="doc-row"><h4>HTML Stacking</h4><div class="v">z‑order: Environment(z1) → Analysis(z2, blend modes) → Product(z3). Radio toggles for env/product. Multi‑toggle for analysis. Zero CSS masks.</div></div>
+<div class="doc-row"><h4>Scripts</h4><div class="v"><code>export_depth_from_blender.py</code> · <code>render_passes.py</code> · <code>depth_pipeline.py</code> · <code>comfyui_api.py</code> — all in src/scripts/. ComfyUI at localhost:8188.</div></div>
+</div>
+</div>
+</section>
+
+<div class="footer"><a href="https://github.com/fxsrdp/html-test-space">fxsrdp/html-test-space</a> · felix schreiber · 2026</div>
 
 <script src="js/cursor.js"></script>
+<script>
+// Generic layer break controller
+function lbRadio(groupId){document.querySelectorAll('#'+groupId+' .ctrl-btn').forEach(b=>{b.classList.remove('on');const e=document.getElementById(b.dataset.id);if(e)e.classList.remove('on')})}
+
+function bindLB(prefix){
+  // Env radio
+  document.querySelectorAll('#'+prefix+'-env-grp .ctrl-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){lbRadio(prefix+'-env-grp');this.classList.add('on');document.getElementById(this.dataset.id).classList.add('on')})
+  });
+  // Product radio — find either sg-grp, cars-grp, or prod-grp
+  ['sg-grp','cars-grp','prod-grp'].forEach(suffix=>{
+    const grp=document.getElementById(prefix+'-'+suffix);
+    if(!grp) return;
+    grp.querySelectorAll('.ctrl-btn').forEach(btn=>{
+      btn.addEventListener('click',function(){lbRadio(prefix+'-'+suffix);this.classList.add('on');document.getElementById(this.dataset.id).classList.add('on')})
+    })
+  });
+  // Analysis multi-toggle
+  document.querySelectorAll('#'+prefix+'-ana-grp .ctrl-btn').forEach(btn=>{
+    btn.addEventListener('click',function(){this.classList.toggle('on');document.getElementById(this.dataset.id).classList.toggle('on')})
+  });
+}
+
+bindLB('lb1'); bindLB('lb2'); bindLB('lb3');
+</script>
 </body>
 </html>
