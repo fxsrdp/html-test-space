@@ -27,7 +27,7 @@ body{
 .inner{max-width:1100px;margin:0 auto}
 .sec-title{font-size:clamp(1.2rem,2vw,1.6rem);font-weight:300;letter-spacing:.03em;color:#1a1a1a;margin-bottom:.25rem}
 .sec-label{font-size:12px;letter-spacing:.1em;color:var(--c);text-transform:uppercase;margin-bottom:.3rem}
-.sec-desc{color:#888;margin-bottom:2rem;max-width:620px;font-size:.9rem}
+.sec-desc{color:#888;margin-bottom:1.5rem;max-width:620px;font-size:.9rem}
 
 /* ═══════ CANVAS ═══════ */
 .canvas-wrap{
@@ -41,10 +41,24 @@ body{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:contain;
 }
-.canvas .bg{transition:opacity .5s}
+/* layer 1 — background (full image, no mask) */
+.canvas .bg{transition:opacity .4s}
 .canvas .bg.hidden{opacity:0;pointer-events:none}
 .canvas .bg.on{opacity:1}
-.canvas .product{z-index:2}
+
+/* layer 2 — product (CSS-masked to sg region only) */
+.canvas .product{
+  z-index:2;
+  mask-image:url('img/pipeline/sg_mask_square.png');
+  -webkit-mask-image:url('img/pipeline/sg_mask_square.png');
+  mask-size:contain;mask-position:center;mask-repeat:no-repeat;
+  -webkit-mask-size:contain;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat;
+  transition:opacity .4s;
+}
+.canvas .product.hidden{opacity:0;pointer-events:none}
+.canvas .product.on{opacity:1}
+
+/* layer 3 — analysis overlays */
 .canvas .overlay{z-index:3;opacity:0;transition:opacity .3s;pointer-events:none}
 .canvas .overlay.on{opacity:1}
 .canvas .overlay.depth-o.on{mix-blend-mode:screen}
@@ -60,8 +74,8 @@ body{
 .badge.on{opacity:1}
 
 /* ═══════ CONTROLS ═══════ */
-.ctrl-section{margin-bottom:1rem;text-align:center}
-.ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.ctrl-section{margin-bottom:.75rem;text-align:center}
+.ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
 .ctrl-row{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap}
 
 .ctrl-btn{
@@ -74,11 +88,6 @@ body{
 .ctrl-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
 .ctrl-btn .dot{width:6px;height:6px;border-radius:50%;background:#ccc;flex-shrink:0}
 .ctrl-btn.active .dot{background:var(--c)}
-
-/* ═══════ FLOW ═══════ */
-.flow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center;margin:1.5rem 0 2rem;font-size:10px;letter-spacing:.05em}
-.flow .step{padding:.3rem .55rem;border:1px solid var(--c18);border-radius:3px;color:var(--c);white-space:nowrap}
-.flow .arr{color:#bbb}
 
 /* ═══════ DOC ═══════ */
 .doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin:2rem 0}
@@ -106,7 +115,7 @@ body{
   <div class="sec-label">Gentle Monster SG</div>
   <div class="sec-title">Layer Break</div>
   <div class="sec-desc">
-    Per-object alpha compositing. Isolated sunglasses (sg collection) sit fixed on top. 6 SDXL-generated backgrounds from two pipeline runs. Analysis layers toggleable. All passes pixel-aligned via identical camera and sensor_fit.
+    sg alpha mask defines the sunglasses region. Background and product are selected independently &mdash; each SDXL output contributes either its environment or its sunglasses. The mask clips the product layer, the background shows everywhere else.
   </div>
 </section>
 
@@ -114,21 +123,26 @@ body{
 <div class="canvas-wrap">
   <div class="canvas" id="canvas">
 
-    <!-- z1: Backgrounds (swappable) — 3 new + 3 old -->
-    <img class="bg on"       data-bg="gm-jungle"    src="img/pipeline/gm_jungle_bg.png" alt="Jungle (new)">
-    <img class="bg hidden"   data-bg="gm-space"     src="img/pipeline/gm_space_bg.png" alt="Space (new)">
-    <img class="bg hidden"   data-bg="gm-fashion"   src="img/pipeline/gm_fashion_bg.png" alt="Fashion (new)">
-    <img class="bg hidden"   data-bg="v1-scifi"     src="img/layerbreak/gen_scifi.png" alt="Sci-Fi (v1)">
-    <img class="bg hidden"   data-bg="v1-bubble"    src="img/layerbreak/gen_bubblebath.png" alt="Bubble Bath (v1)">
-    <img class="bg hidden"   data-bg="v1-jungle"    src="img/layerbreak/gen_jungle.png" alt="Jungle (v1)">
+    <!-- z1: Backgrounds (full image) -->
+    <img class="bg on hidden"  data-bg="gm-jungle"  src="img/pipeline/gm_jungle_bg.png">
+    <img class="bg on hidden"  data-bg="gm-space"   src="img/pipeline/gm_space_bg.png">
+    <img class="bg on"         data-bg="gm-fashion" src="img/pipeline/gm_fashion_bg.png">
+    <img class="bg on hidden"  data-bg="v1-scifi"   src="img/layerbreak/gen_scifi.png">
+    <img class="bg on hidden"  data-bg="v1-bubble"  src="img/layerbreak/gen_bubblebath.png">
+    <img class="bg on hidden"  data-bg="v1-jungle"  src="img/layerbreak/gen_jungle.png">
 
-    <!-- z2: Product alpha (always on top) -->
-    <img class="product" src="img/pipeline/sg_alpha.png" alt="Sunglasses">
+    <!-- z2: Products (CSS-masked to sg region) -->
+    <img class="product on hidden" data-prod="prod-beauty"  src="img/pipeline/gentle_monster_alpha.png">
+    <img class="product on"        data-prod="prod-jungle"  src="img/pipeline/gm_jungle_bg.png">
+    <img class="product on hidden" data-prod="prod-space"   src="img/pipeline/gm_space_bg.png">
+    <img class="product on hidden" data-prod="prod-fashion" src="img/pipeline/gm_fashion_bg.png">
+    <img class="product on hidden" data-prod="prod-scifi"   src="img/layerbreak/gen_scifi.png">
+    <img class="product on hidden" data-prod="prod-bubble"  src="img/layerbreak/gen_bubblebath.png">
 
-    <!-- z3: Analysis overlays (toggleable) -->
-    <img class="overlay depth-o" id="ol-depth"    src="img/pipeline/gentle_monster_depth.png" alt="Depth">
-    <img class="overlay normal-o" id="ol-normals" src="img/pipeline/gentle_monster_normal.png" alt="Normals">
-    <img class="overlay objects-o" id="ol-objects" src="img/pipeline/gentle_monster_objects.png" alt="Objects">
+    <!-- z3: Analysis overlays -->
+    <img class="overlay depth-o" id="ol-depth"    src="img/pipeline/gentle_monster_depth.png">
+    <img class="overlay normal-o" id="ol-normals" src="img/pipeline/gentle_monster_normal.png">
+    <img class="overlay objects-o" id="ol-objects" src="img/pipeline/gentle_monster_objects.png">
 
     <div class="badge" id="badge-depth">Depth Map</div>
     <div class="badge" id="badge-normals">Normals</div>
@@ -136,17 +150,30 @@ body{
   </div>
 </div>
 
-<!-- ═══════ BACKGROUND SWITCHER ═══════ -->
+<!-- ═══════ BACKGROUND SELECTOR ═══════ -->
 <div class="ctrl-section">
-  <div class="ctrl-label">Background</div>
+  <div class="ctrl-label">Background (full scene, no mask)</div>
   <div class="ctrl-row" id="bg-switcher">
-    <button class="ctrl-btn active" data-bg="gm-jungle"><span class="dot"></span>Jungle</button>
+    <button class="ctrl-btn" data-bg="gm-jungle"><span class="dot"></span>Jungle</button>
     <button class="ctrl-btn" data-bg="gm-space"><span class="dot"></span>Space Station</button>
-    <button class="ctrl-btn" data-bg="gm-fashion"><span class="dot"></span>Fashion</button>
-    <span style="color:#ddd;margin:0 .3rem;align-self:center">&middot;</span>
+    <button class="ctrl-btn active" data-bg="gm-fashion"><span class="dot"></span>Fashion</button>
+    <span style="color:#ccc;align-self:center;font-size:10px">&bull;</span>
     <button class="ctrl-btn" data-bg="v1-scifi"><span class="dot"></span>Sci-Fi <span style="font-size:9px;color:#aaa">v1</span></button>
     <button class="ctrl-btn" data-bg="v1-bubble"><span class="dot"></span>Bubble Bath <span style="font-size:9px;color:#aaa">v1</span></button>
     <button class="ctrl-btn" data-bg="v1-jungle"><span class="dot"></span>Jungle <span style="font-size:9px;color:#aaa">v1</span></button>
+  </div>
+</div>
+
+<!-- ═══════ PRODUCT SELECTOR ═══════ -->
+<div class="ctrl-section">
+  <div class="ctrl-label">Product &mdash; sunglasses only (sg mask applied)</div>
+  <div class="ctrl-row" id="prod-switcher">
+    <button class="ctrl-btn" data-prod="prod-beauty"><span class="dot"></span>Beauty Render</button>
+    <button class="ctrl-btn active" data-prod="prod-jungle"><span class="dot"></span>Jungle</button>
+    <button class="ctrl-btn" data-prod="prod-space"><span class="dot"></span>Space Station</button>
+    <button class="ctrl-btn" data-prod="prod-fashion"><span class="dot"></span>Fashion</button>
+    <button class="ctrl-btn" data-prod="prod-scifi"><span class="dot"></span>Sci-Fi <span style="font-size:9px;color:#aaa">v1</span></button>
+    <button class="ctrl-btn" data-prod="prod-bubble"><span class="dot"></span>Bubble Bath <span style="font-size:9px;color:#aaa">v1</span></button>
   </div>
 </div>
 
@@ -160,42 +187,31 @@ body{
   </div>
 </div>
 
-<!-- ═══════ PIPELINE ═══════ -->
-<div class="flow">
-  <span class="step">Blender</span><span class="arr">&rarr;</span>
-  <span class="step">Collection Filter</span><span class="arr">&rarr;</span>
-  <span class="step">EEVEE Alpha</span><span class="arr">&rarr;</span>
-  <span class="step">Cycles Depth</span><span class="arr">&rarr;</span>
-  <span class="step">Pad Square</span><span class="arr">&rarr;</span>
-  <span class="step">SDXL &times;6</span><span class="arr">&rarr;</span>
-  <span class="step">Composite</span>
-</div>
-
 <!-- ═══════ DOC ═══════ -->
 <div class="doc-grid">
   <div class="doc-row">
-    <h4>sg Collection (Product)</h4>
-    <div class="v">Cube.002 (37K) + Plane.004 (168K) &middot; Sub-collection under felix 1 &middot; Rendered in isolation with all other objects hidden</div>
+    <h4>sg Collection</h4>
+    <div class="v">Cube.002 + Plane.004 &middot; Sub-collection under felix 1 &middot; Sunglasses geometry only &middot; Rendered in isolation</div>
   </div>
   <div class="doc-row">
-    <h4>Backgrounds &mdash; New (2026-05-30)</h4>
-    <div class="v">Jungle / Space / Fashion &middot; Depth padded to 2048&times;2048 &middot; ControlNet 0.85 &middot; 20 steps &middot; 1024&times;1024 SDXL</div>
+    <h4>Alpha Mask</h4>
+    <div class="v">sg alpha padded to square (2048&times;2048) with same y-offset as depth map. CSS mask-image clips product layer to sunglasses region.</div>
   </div>
   <div class="doc-row">
-    <h4>Backgrounds &mdash; v1 (2026-05-20)</h4>
-    <div class="v">Sci-Fi / Bubble Bath / Jungle Monster &middot; Full-scene depth (128 spp) &middot; 25&ndash;30 steps &middot; SDXL 1024&times;1024</div>
+    <h4>Product Layer</h4>
+    <div class="v">6 sources &middot; CSS-masked &middot; Shows only sunglasses pixels &middot; Selected independently from background</div>
   </div>
   <div class="doc-row">
-    <h4>Depth Map</h4>
-    <div class="v">Cycles 5 spp &middot; Compositor: Z-Pass &rarr; Normalize &rarr; Invert &rarr; EXR &rarr; 16-bit PNG &middot; sensor_fit HORIZONTAL</div>
+    <h4>Background Layer</h4>
+    <div class="v">Full SDXL output &middot; 6 environments &middot; Contains product too but masked product layer covers it &middot; Selected independently</div>
   </div>
   <div class="doc-row">
-    <h4>Object ID (21 colors)</h4>
-    <div class="v">Random emission shaders (seed 42) &middot; One RGB per mesh &middot; 2048&times;1024 &middot; Per-object masking possible</div>
+    <h4>Object ID Map</h4>
+    <div class="v">21 emission colors &middot; One RGB per mesh &middot; Enables per-object masking &middot; Toggleable as analysis overlay</div>
   </div>
   <div class="doc-row">
-    <h4>Layer Stack</h4>
-    <div class="v">z1: 6 SDXL bgs &middot; z2: sg alpha (fixed) &middot; z3: depth/normals/objects overlays &middot; All passes pixel-aligned</div>
+    <h4>Combinations</h4>
+    <div class="v">6 backgrounds &times; 6 products = 36 unique combinations &middot; All rendered from same depth map &middot; Pixel-aligned via sensor_fit HORIZONTAL</div>
   </div>
 </div>
 
@@ -218,7 +234,21 @@ document.querySelectorAll('#bg-switcher .ctrl-btn').forEach(btn=>{
   });
 });
 
-// Analysis overlay toggles
+// Product switcher
+const prods=document.querySelectorAll('#canvas .product');
+document.querySelectorAll('#prod-switcher .ctrl-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const key=btn.dataset.prod;
+    document.querySelectorAll('#prod-switcher .ctrl-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    prods.forEach(p=>{
+      p.classList.toggle('hidden', p.dataset.prod!==key);
+      p.classList.toggle('on', p.dataset.prod===key);
+    });
+  });
+});
+
+// Overlay toggles
 const overlays={},badges={};
 document.querySelectorAll('.overlay').forEach(el=>overlays[el.id.replace('ol-','')]=el);
 document.querySelectorAll('.badge').forEach(el=>badges[el.id.replace('badge-','')]=el);
