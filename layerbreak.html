@@ -18,7 +18,7 @@ body{
   -webkit-font-smoothing:antialiased;padding:2rem 1.5rem 0;
 }
 .nav{
-  max-width:1100px;margin:0 auto 2rem;display:flex;align-items:center;gap:1.2rem;
+  max-width:1000px;margin:0 auto 2rem;display:flex;align-items:center;gap:1.2rem;
   font-size:12px;letter-spacing:.06em;border-bottom:1px solid #e0ddd6;padding-bottom:.75rem;
 }
 .nav b{font-weight:500;color:#1a1a1a;flex:1}
@@ -29,7 +29,7 @@ body{
 .sec-label{font-size:12px;letter-spacing:.1em;color:var(--c);text-transform:uppercase;margin-bottom:.3rem}
 .sec-desc{color:#888;margin-bottom:1.5rem;max-width:620px;font-size:.9rem}
 
-/* ═══════ SPLIT CANVAS ═══════ */
+/* ═══════ CANVAS ═══════ */
 .split-wrap{
   max-width:900px;margin:0 auto 1rem;
   border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:#111;
@@ -42,33 +42,29 @@ body{
   position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
 }
 
-/* Mask definitions — both halves share the same mask pair */
-.mask-sg{
+/* Each half */
+.half{position:absolute;top:0;bottom:0;overflow:hidden}
+.half-l{left:0;width:50%}
+.half-r{left:50%;width:50%}
+
+/* Environment layer — full image, no mask */
+.half .env{z-index:1}
+.half .env img{transition:opacity .5s}
+
+/* Product layer — masked with sg alpha */
+.half .prod{z-index:2}
+.half .prod img{
+  transition:opacity .5s;
   mask-image:url('img/pipeline/sg_mask_square.png');
   -webkit-mask-image:url('img/pipeline/sg_mask_square.png');
   mask-size:contain;mask-position:center;mask-repeat:no-repeat;
   -webkit-mask-size:contain;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat;
 }
-.mask-env{
-  mask-image:url('img/pipeline/sg_mask_invert.png');
-  -webkit-mask-image:url('img/pipeline/sg_mask_invert.png');
-  mask-size:contain;mask-position:center;mask-repeat:no-repeat;
-  -webkit-mask-size:contain;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat;
-}
-
-/* Each half has env + product stacked */
-.half{position:absolute;top:0;bottom:0;width:50%;overflow:hidden}
-.half-l{left:0}
-.half-r{left:50%}
-.half .env{z-index:1}
-.half .prod{z-index:2}
-.half img{transition:opacity .4s}
-.half img.hidden{opacity:0}
 
 /* Divider */
 .divider{
   position:absolute;top:0;bottom:0;left:50%;width:2px;
-  background:var(--c);z-index:5;transform:translateX(-1px);
+  background:var(--c);z-index:10;transform:translateX(-1px);
   box-shadow:0 0 10px rgba(0,229,255,.4);cursor:ew-resize;
 }
 .divider .knob{
@@ -86,23 +82,23 @@ body{
 .divider .knob::after{right:8px;transform:rotate(45deg)}
 
 .half-label{
-  position:absolute;top:.5rem;z-index:6;
+  position:absolute;top:.5rem;z-index:11;
   font-size:10px;letter-spacing:.06em;color:#fff;
-  background:rgba(0,0,0,.5);padding:.2rem .5rem;border-radius:3px;
-  pointer-events:none;transition:opacity .3s;
+  background:rgba(0,0,0,.55);padding:.2rem .48rem;border-radius:3px;
+  pointer-events:none;
 }
 .half-l .half-label{left:.5rem}
 .half-r .half-label{right:.5rem}
 
 /* ═══════ OVERLAYS ═══════ */
-.split-cnv .overlay{z-index:7;opacity:0;transition:opacity .3s;pointer-events:none}
+.split-cnv .overlay{z-index:12;opacity:0;transition:opacity .3s;pointer-events:none}
 .split-cnv .overlay.on{opacity:1}
 .split-cnv .overlay.depth-o.on{mix-blend-mode:screen}
 .split-cnv .overlay.normal-o.on{mix-blend-mode:overlay}
 .split-cnv .overlay.objects-o.on{mix-blend-mode:screen}
 
 .badge{
-  position:absolute;bottom:.5rem;right:.75rem;z-index:8;
+  position:absolute;bottom:.5rem;right:.75rem;z-index:13;
   font-size:10px;letter-spacing:.08em;color:#fff;
   text-shadow:0 1px 3px rgba(0,0,0,.6);
   opacity:0;transition:opacity .3s;pointer-events:none;
@@ -110,13 +106,13 @@ body{
 .badge.on{opacity:1}
 
 /* ═══════ CONTROLS ═══════ */
-.ctrl-section{margin-bottom:.6rem;text-align:center}
+.ctrl-section{margin-bottom:.55rem;text-align:center}
 .ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
 .ctrl-row{display:flex;gap:.35rem;justify-content:center;flex-wrap:wrap}
 
 .ctrl-btn{
   display:inline-flex;align-items:center;gap:.25rem;
-  padding:.35rem .65rem;border:1px solid #e0ddd6;border-radius:3px;
+  padding:.35rem .6rem;border:1px solid #e0ddd6;border-radius:3px;
   font-size:10px;letter-spacing:.04em;color:#888;
   background:none;cursor:pointer;transition:all .2s;font-family:inherit;
 }
@@ -151,7 +147,7 @@ body{
   <div class="sec-label">Gentle Monster SG</div>
   <div class="sec-title">Layer Break</div>
   <div class="sec-desc">
-    Each SDXL output is split in the browser via sg alpha masks. Background layer = environment only (inverted mask). Product layer = sunglasses only (sg mask). Both composited from different sources. A/B split for side-by-side comparison.
+    Environment layer = full SDXL output. Product layer = Beauty Render, masked with sg alpha &mdash; the mask defines opacity: white = product visible, black = see through to environment. A/B split compares two product sources on the same background.
   </div>
 </section>
 
@@ -161,16 +157,18 @@ body{
 
     <!-- LEFT HALF -->
     <div class="half half-l" id="halfL">
-      <img class="env mask-env" id="envL" src="img/pipeline/gm_fashion_bg.png">
-      <img class="prod mask-sg" id="prodL" src="img/pipeline/gentle_monster_alpha.png">
-      <div class="half-label" id="labelL">Beauty / Fashion</div>
+      <!-- env: full SDXL, no mask -->
+      <div class="env"><img id="envL" src="img/pipeline/gm_fashion_bg.png"></div>
+      <!-- prod: Beauty Render, masked with sg alpha -->
+      <div class="prod"><img id="prodL" src="img/pipeline/gentle_monster_alpha.png"></div>
+      <div class="half-label" id="labelL">Beauty &bull; Fashion</div>
     </div>
 
     <!-- RIGHT HALF -->
     <div class="half half-r" id="halfR">
-      <img class="env mask-env" id="envR" src="img/pipeline/gm_fashion_bg.png">
-      <img class="prod mask-sg" id="prodR" src="img/pipeline/gm_jungle_bg.png">
-      <div class="half-label" id="labelR">Jungle / Fashion</div>
+      <div class="env"><img id="envR" src="img/pipeline/gm_fashion_bg.png"></div>
+      <div class="prod"><img id="prodR" src="img/pipeline/gm_jungle_bg.png"></div>
+      <div class="half-label" id="labelR">Jungle &bull; Fashion</div>
     </div>
 
     <!-- DIVIDER -->
@@ -189,7 +187,7 @@ body{
 
 <!-- ═══════ CONTROLS ═══════ -->
 <div class="ctrl-section">
-  <div class="ctrl-label">Background (applies to both halves)</div>
+  <div class="ctrl-label">Environment (background, no mask) &mdash; shared by both halves</div>
   <div class="ctrl-row" id="bg-switcher">
     <button class="ctrl-btn" data-src="img/pipeline/gm_jungle_bg.png"><span class="dot"></span>Jungle</button>
     <button class="ctrl-btn" data-src="img/pipeline/gm_space_bg.png"><span class="dot"></span>Space</button>
@@ -201,7 +199,7 @@ body{
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label">Left product &mdash; sunglasses only (sg mask)</div>
+  <div class="ctrl-label">Left product — masked with sg alpha (where mask=white, this shows)</div>
   <div class="ctrl-row" id="prodL-switcher">
     <button class="ctrl-btn active" data-src="img/pipeline/gentle_monster_alpha.png"><span class="dot"></span>Beauty</button>
     <button class="ctrl-btn" data-src="img/pipeline/gm_jungle_bg.png"><span class="dot"></span>Jungle</button>
@@ -213,7 +211,7 @@ body{
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label">Right product &mdash; sunglasses only (sg mask)</div>
+  <div class="ctrl-label">Right product — masked with sg alpha (where mask=white, this shows)</div>
   <div class="ctrl-row" id="prodR-switcher">
     <button class="ctrl-btn" data-src="img/pipeline/gentle_monster_alpha.png"><span class="dot"></span>Beauty</button>
     <button class="ctrl-btn active" data-src="img/pipeline/gm_jungle_bg.png"><span class="dot"></span>Jungle</button>
@@ -233,23 +231,22 @@ body{
   </div>
 </div>
 
-<!-- ═══════ DOC ═══════ -->
 <div class="doc-grid">
   <div class="doc-row">
-    <h4>sg Mask</h4>
-    <div class="v">White=sunglasses, black=environment. Masks product layer to show only sg region.</div>
+    <h4>sg Alpha Mask</h4>
+    <div class="v">Isolated render of sg collection (Cube.002 + Plane.004). Padded to square with same y-offset as depth map. White=sunglasses, black=transparent.</div>
   </div>
   <div class="doc-row">
-    <h4>Inverted Mask (env)</h4>
-    <div class="v">Black=sunglasses, white=environment. Masks background layer to hide sg region &mdash; no product bleed-through.</div>
+    <h4>Environment Layer</h4>
+    <div class="v">Full SDXL output — no mask. Shows everything: environment + built-in sunglasses. Sunglasses from env are covered by product layer.</div>
   </div>
   <div class="doc-row">
-    <h4>Compositing</h4>
-    <div class="v">env layer (inverted mask) + prod layer (sg mask). Two masks are exact inverses &mdash; zero overlap or gap.</div>
+    <h4>Product Layer</h4>
+    <div class="v">CSS mask-image with sg alpha. Where mask=white → product visible (covers env's product). Where mask=black → transparent (env shows through).</div>
   </div>
   <div class="doc-row">
     <h4>A/B Split</h4>
-    <div class="v">Same background, two different product sources side-by-side. Draggable divider. Compare CG vs SDXL product.</div>
+    <div class="v">Same environment, two product sources side-by-side. Draggable divider. Compare CG Beauty vs SDXL product in identical setting.</div>
   </div>
 </div>
 
@@ -261,46 +258,40 @@ body{
 const envL=document.getElementById('envL'),prodL=document.getElementById('prodL'),labelL=document.getElementById('labelL');
 const envR=document.getElementById('envR'),prodR=document.getElementById('prodR'),labelR=document.getElementById('labelR');
 
-// Background switcher — applies to both halves
+// Background switcher
 document.querySelectorAll('#bg-switcher .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     const src=btn.dataset.src;
     document.querySelectorAll('#bg-switcher .ctrl-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     envL.src=src;envR.src=src;
-    // Hide then show to trigger mask re-composite
-    envL.classList.add('hidden');envR.classList.add('hidden');
-    requestAnimationFrame(()=>{envL.classList.remove('hidden');envR.classList.remove('hidden')});
   });
 });
 
-// Left product switcher
+// Product switchers
+function setProd(img,btn){
+  const src=btn.dataset.src;
+  btn.parentElement.querySelectorAll('.ctrl-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  img.src=src;
+}
 document.querySelectorAll('#prodL-switcher .ctrl-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    const src=btn.dataset.src;
-    document.querySelectorAll('#prodL-switcher .ctrl-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    prodL.src=src;
-    labelL.textContent=btn.textContent.trim().replace(/\s*·.*/,'')+' / bg';
-    prodL.classList.add('hidden');
-    requestAnimationFrame(()=>prodL.classList.remove('hidden'));
-  });
+  btn.addEventListener('click',()=>{setProd(prodL,btn);labelL.textContent=btn.textContent.replace(/\s*·.*/,'')+' · '+document.querySelector('#bg-switcher .ctrl-btn.active').textContent.replace(/\s*·.*/,'')});
 });
-
-// Right product switcher
 document.querySelectorAll('#prodR-switcher .ctrl-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{setProd(prodR,btn);labelR.textContent=btn.textContent.replace(/\s*·.*/,'')+' · '+document.querySelector('#bg-switcher .ctrl-btn.active').textContent.replace(/\s*·.*/,'')});
+});
+
+// Update labels on bg switch too
+document.querySelectorAll('#bg-switcher .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
-    const src=btn.dataset.src;
-    document.querySelectorAll('#prodR-switcher .ctrl-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    prodR.src=src;
-    labelR.textContent=btn.textContent.trim().replace(/\s*·.*/,'')+' / bg';
-    prodR.classList.add('hidden');
-    requestAnimationFrame(()=>prodR.classList.remove('hidden'));
+    const bgName=btn.textContent.replace(/\s*·.*/,'');
+    labelL.textContent=document.querySelector('#prodL-switcher .ctrl-btn.active').textContent.replace(/\s*·.*/,'')+' · '+bgName;
+    labelR.textContent=document.querySelector('#prodR-switcher .ctrl-btn.active').textContent.replace(/\s*·.*/,'')+' · '+bgName;
   });
 });
 
-// Draggable divider
+// Divider drag
 const wrap=document.getElementById('wrap');
 const halfL=document.getElementById('halfL'),halfR=document.getElementById('halfR');
 const divider=document.getElementById('divider');
