@@ -38,14 +38,12 @@ body{
 .canvas .layer{opacity:0;pointer-events:none;transition:opacity .3s}
 .canvas .layer.on{opacity:1}
 
-/* env-only: inverted mask hides product */
 .env-only{
   mask-image:url('img/pipeline/sg001_mask_inv.png');
   -webkit-mask-image:url('img/pipeline/sg001_mask_inv.png');
   mask-size:contain;mask-position:center;mask-repeat:no-repeat;
   -webkit-mask-size:contain;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat;
 }
-/* sg-cut: mask shows only product (for SDXL outputs without alpha) */
 .sg-cut{
   mask-image:url('img/pipeline/sg001_mask_sq.png');
   -webkit-mask-image:url('img/pipeline/sg001_mask_sq.png');
@@ -53,13 +51,13 @@ body{
   -webkit-mask-size:contain;-webkit-mask-position:center;-webkit-mask-repeat:no-repeat;
 }
 
-.depth-l.on{mix-blend-mode:screen}
-.normal-l.on{mix-blend-mode:overlay}
-.objects-l.on{mix-blend-mode:screen}
+.ana-depth.on{mix-blend-mode:screen}
+.ana-norm.on{mix-blend-mode:overlay}
+.ana-objs.on{mix-blend-mode:screen}
 
 .ctrl-section{margin-bottom:.8rem}
 .ctrl-label{font-size:10px;color:#aaa;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.35rem}
-.ctrl-row,.src-grid{display:flex;gap:.35rem;flex-wrap:wrap}
+.ctrl-row{display:flex;gap:.35rem;flex-wrap:wrap}
 
 .ctrl-btn{
   display:inline-flex;align-items:center;gap:.25rem;
@@ -72,10 +70,12 @@ body{
 .ctrl-btn .dot{width:5px;height:5px;border-radius:50%;background:#ccc;flex-shrink:0}
 .ctrl-btn.on .dot{background:var(--c)}
 
-.footer{text-align:center;padding:2rem 0;color:#bbb;font-size:11px;letter-spacing:.08em}
-
-@media(max-width:768px){body{padding:1rem .75rem 0}}
-</style>
+.key{font-size:9px;color:#bbb;letter-spacing:.06em;text-align:center;margin-top:1rem;line-height:1.8}
+.key b{color:var(--c);font-weight:400}
+.key span{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px;vertical-align:middle}
+.key span.sg{background:var(--c);opacity:.4}
+.key span.env{background:var(--c);opacity:.15}
+.key span.ana{background:var(--c)}</style>
 </head>
 <body>
 
@@ -92,79 +92,77 @@ body{
   <div class="sec-label">Gentle Monster SG</div>
   <div class="sec-title">Layer Break</div>
   <div class="sec-desc">
-    sg.001 alpha (product on transparent background) &middot; its own RGBA channel handles compositing. SDXL outputs use CSS masks to extract product or environment. Toggle layers individually.
+    sg.001 isolated via collection instance render &middot; 6 SDXL environments &middot; 6 product variations &middot; 3 analysis layers
   </div>
 </section>
 
 <div class="canvas-wrap">
   <div class="canvas" id="canvas">
 
-    <!-- z1: Environment (inverted mask: show env, hide product) -->
-    <img class="layer env-only on"  id="ly-env-jungle"  src="img/pipeline/gm_jungle_bg.png">
-    <img class="layer env-only"     id="ly-env-space"   src="img/pipeline/gm_space_bg.png">
-    <img class="layer env-only"     id="ly-env-fashion" src="img/pipeline/gm_fashion_bg.png">
-    <img class="layer env-only"     id="ly-env-scifi"   src="img/layerbreak/gen_scifi.png">
-    <img class="layer env-only"     id="ly-env-bubble"  src="img/layerbreak/gen_bubblebath.png">
-    <img class="layer env-only"     id="ly-env-junglev1" src="img/layerbreak/gen_jungle.png">
+    <!-- ENVIRONMENT: inverted mask hides product region, shows everything else -->
+    <img class="layer env-only on" id="env-jungle"  src="img/pipeline/gm_jungle_bg.png">
+    <img class="layer env-only"    id="env-space"   src="img/pipeline/gm_space_bg.png">
+    <img class="layer env-only"    id="env-fashion" src="img/pipeline/gm_fashion_bg.png">
+    <img class="layer env-only"    id="env-scifi"   src="img/layerbreak/gen_scifi.png">
+    <img class="layer env-only"    id="env-bubble"  src="img/layerbreak/gen_bubblebath.png">
+    <img class="layer env-only"    id="env-junglev1" src="img/layerbreak/gen_jungle.png">
 
-    <!-- z2: sg.001 alpha (PNG has its own alpha — product opaque, bg transparent) -->
-    <img class="layer on" id="ly-beauty" src="img/pipeline/sg001_alpha.png">
+    <!-- PRODUCT: Beauty Render — native PNG alpha, no CSS mask -->
+    <img class="layer on" id="sg-beauty" src="img/pipeline/sg001_alpha.png">
 
-    <!-- z3: SDXL extractions (CSS-masked to sg region, these have no native alpha) -->
-    <img class="layer sg-cut" id="ly-sg-jungle"  src="img/pipeline/gm_jungle_bg.png">
-    <img class="layer sg-cut" id="ly-sg-space"   src="img/pipeline/gm_space_bg.png">
-    <img class="layer sg-cut" id="ly-sg-fashion" src="img/pipeline/gm_fashion_bg.png">
-    <img class="layer sg-cut" id="ly-sg-scifi"   src="img/layerbreak/gen_scifi.png">
-    <img class="layer sg-cut" id="ly-sg-bubble"  src="img/layerbreak/gen_bubblebath.png">
+    <!-- PRODUCT: SDXL extractions — CSS mask extracts only product region -->
+    <img class="layer sg-cut" id="sg-jungle"  src="img/pipeline/gm_jungle_bg.png">
+    <img class="layer sg-cut" id="sg-space"   src="img/pipeline/gm_space_bg.png">
+    <img class="layer sg-cut" id="sg-fashion" src="img/pipeline/gm_fashion_bg.png">
+    <img class="layer sg-cut" id="sg-scifi"   src="img/layerbreak/gen_scifi.png">
+    <img class="layer sg-cut" id="sg-bubble"  src="img/layerbreak/gen_bubblebath.png">
 
-    <!-- z4: Analysis -->
-    <img class="layer depth-l"   id="ly-depth"   src="img/pipeline/gentle_monster_depth.png">
-    <img class="layer normal-l"  id="ly-normals" src="img/pipeline/gentle_monster_normal.png">
-    <img class="layer objects-l" id="ly-objects" src="img/pipeline/gentle_monster_objects.png">
+    <!-- ANALYSIS -->
+    <img class="layer ana-depth" id="ly-depth"   src="img/pipeline/gentle_monster_depth.png">
+    <img class="layer ana-norm"  id="ly-normals" src="img/pipeline/gentle_monster_normal.png">
+    <img class="layer ana-objs"  id="ly-objects" src="img/pipeline/gentle_monster_objects.png">
 
   </div>
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label">Environment (sg mask inverted &mdash; hides product)</div>
-  <div class="src-grid" id="env-ctrls">
-    <button class="ctrl-btn on" data-layer="ly-env-jungle"><span class="dot"></span>Jungle</button>
-    <button class="ctrl-btn" data-layer="ly-env-space"><span class="dot"></span>Space</button>
-    <button class="ctrl-btn" data-layer="ly-env-fashion"><span class="dot"></span>Fashion</button>
-    <button class="ctrl-btn" data-layer="ly-env-scifi"><span class="dot"></span>Sci-Fi</button>
-    <button class="ctrl-btn" data-layer="ly-env-bubble"><span class="dot"></span>Bubble</button>
-    <button class="ctrl-btn" data-layer="ly-env-junglev1"><span class="dot"></span>Jungle v1</button>
+  <div class="ctrl-label">Environment &mdash; inverted mask (hides product, shows everything else)</div>
+  <div class="ctrl-row" id="env-grp">
+    <button class="ctrl-btn on" data-id="env-jungle"><span class="dot"></span>Jungle</button>
+    <button class="ctrl-btn"    data-id="env-space"><span class="dot"></span>Space Station</button>
+    <button class="ctrl-btn"    data-id="env-fashion"><span class="dot"></span>Fashion</button>
+    <button class="ctrl-btn"    data-id="env-scifi"><span class="dot"></span>Sci-Fi <em style="font-size:9px;color:#aaa">v1</em></button>
+    <button class="ctrl-btn"    data-id="env-bubble"><span class="dot"></span>Bubble Bath <em style="font-size:9px;color:#aaa">v1</em></button>
+    <button class="ctrl-btn"    data-id="env-junglev1"><span class="dot"></span>Jungle <em style="font-size:9px;color:#aaa">v1</em></button>
   </div>
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label" style="color:var(--c)">Beauty Product &middot; sg.001 alpha (PNG transparency, no CSS mask needed)</div>
-  <div class="ctrl-row">
-    <button class="ctrl-btn on" data-layer="ly-beauty" id="btn-beauty"><span class="dot"></span>ON &mdash; sg.001 (alpha in PNG)</button>
+  <div class="ctrl-label">Product &mdash; sunglasses only. Beauty uses native alpha, SDXL uses CSS mask</div>
+  <div class="ctrl-row" id="sg-grp">
+    <button class="ctrl-btn on" data-id="sg-beauty"><span class="dot"></span>Beauty <em style="font-size:9px;color:#aaa">alpha PNG</em></button>
+    <button class="ctrl-btn"    data-id="sg-jungle"><span class="dot"></span>Jungle</button>
+    <button class="ctrl-btn"    data-id="sg-space"><span class="dot"></span>Space</button>
+    <button class="ctrl-btn"    data-id="sg-fashion"><span class="dot"></span>Fashion</button>
+    <button class="ctrl-btn"    data-id="sg-scifi"><span class="dot"></span>Sci-Fi <em style="font-size:9px;color:#aaa">v1</em></button>
+    <button class="ctrl-btn"    data-id="sg-bubble"><span class="dot"></span>Bubble <em style="font-size:9px;color:#aaa">v1</em></button>
   </div>
 </div>
 
 <div class="ctrl-section">
-  <div class="ctrl-label">SDXL Product (sg-cut CSS mask applied &mdash; these have no alpha)</div>
-  <div class="src-grid" id="sg-ctrls">
-    <button class="ctrl-btn" data-layer="ly-sg-jungle"><span class="dot"></span>Jungle</button>
-    <button class="ctrl-btn" data-layer="ly-sg-space"><span class="dot"></span>Space</button>
-    <button class="ctrl-btn" data-layer="ly-sg-fashion"><span class="dot"></span>Fashion</button>
-    <button class="ctrl-btn" data-layer="ly-sg-scifi"><span class="dot"></span>Sci-Fi</button>
-    <button class="ctrl-btn" data-layer="ly-sg-bubble"><span class="dot"></span>Bubble</button>
+  <div class="ctrl-label">Analysis overlay &mdash; multi-select</div>
+  <div class="ctrl-row" id="ana-grp">
+    <button class="ctrl-btn" data-id="ly-depth"><span class="dot"></span>Depth</button>
+    <button class="ctrl-btn" data-id="ly-normals"><span class="dot"></span>Normals</button>
+    <button class="ctrl-btn" data-id="ly-objects"><span class="dot"></span>Object IDs</button>
   </div>
 </div>
 
-<div class="ctrl-section">
-  <div class="ctrl-label">Analysis (multi-select)</div>
-  <div class="ctrl-row">
-    <button class="ctrl-btn" data-layer="ly-depth"><span class="dot"></span>Depth</button>
-    <button class="ctrl-btn" data-layer="ly-normals"><span class="dot"></span>Normals</button>
-    <button class="ctrl-btn" data-layer="ly-objects"><span class="dot"></span>Object IDs</button>
-  </div>
+<div class="key">
+  <span class="sg"></span> <b>sg mask</b> &mdash; white=product visible &emsp;
+  <span class="env"></span> <b>inv mask</b> &mdash; white=environment visible &emsp;
+  <span class="ana"></span> <b>analysis</b> &mdash; blend-mode overlay
 </div>
-
-<div class="footer">Layer Break &middot; Gentle Monster SG &middot; html-test-space</div>
 
 </div>
 
@@ -172,38 +170,29 @@ body{
 function radio(sel){
   document.querySelectorAll(sel+' .ctrl-btn').forEach(b=>{
     b.classList.remove('on');
-    const ly = document.getElementById(b.dataset.layer);
-    if(ly) ly.classList.remove('on');
+    const el=document.getElementById(b.dataset.id);
+    if(el)el.classList.remove('on');
   });
 }
 
-document.querySelectorAll('#env-ctrls .ctrl-btn').forEach(btn=>{
+document.querySelectorAll('#env-grp .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',function(){
-    radio('#env-ctrls');
-    this.classList.add('on');
-    document.getElementById(this.dataset.layer).classList.add('on');
+    radio('#env-grp');this.classList.add('on');
+    document.getElementById(this.dataset.id).classList.add('on');
   });
 });
 
-document.querySelectorAll('#sg-ctrls .ctrl-btn').forEach(btn=>{
+document.querySelectorAll('#sg-grp .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',function(){
-    radio('#sg-ctrls');
-    this.classList.add('on');
-    document.getElementById(this.dataset.layer).classList.add('on');
+    radio('#sg-grp');this.classList.add('on');
+    document.getElementById(this.dataset.id).classList.add('on');
   });
 });
 
-// Beauty toggle (independent, uses native alpha)
-document.getElementById('btn-beauty').addEventListener('click',function(){
-  this.classList.toggle('on');
-  document.getElementById('ly-beauty').classList.toggle('on');
-});
-
-// Analysis multiple toggle
-document.querySelectorAll('[data-layer^="ly-depth"],[data-layer^="ly-normals"],[data-layer^="ly-objects"]').forEach(btn=>{
+document.querySelectorAll('#ana-grp .ctrl-btn').forEach(btn=>{
   btn.addEventListener('click',function(){
     this.classList.toggle('on');
-    document.getElementById(this.dataset.layer).classList.toggle('on');
+    document.getElementById(this.dataset.id).classList.toggle('on');
   });
 });
 </script>
