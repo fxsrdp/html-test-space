@@ -3,399 +3,247 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Layer Break — Gentle Monster SG Analysis</title>
+<title>Layer Break — Gentle Monster SG</title>
 <style>
-:root{--fs-base:clamp(.875rem,1.11vw,1.125rem);--fs-sm:calc(var(--fs-base)*.75);--fs-lg:clamp(1.5rem,3vw,2.2rem)}
-:root{--c:#00e5ff;--c08:rgba(0,229,255,.08);--c12:rgba(0,229,255,.12);--c18:rgba(0,229,255,.18);--c25:rgba(0,229,255,.25);--c35:rgba(0,229,255,.35);--bg1:#f7f6f4;--bg2:#ece8df}
-
+:root{
+  --c:#00e5ff;--c08:rgba(0,229,255,.08);--c12:rgba(0,229,255,.12);
+  --c18:rgba(0,229,255,.18);--c25:rgba(0,229,255,.25);
+  --bg1:#f7f6f4;--bg2:#ece8df;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--bg1);scroll-behavior:smooth}
-body{font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;background:var(--bg1);line-height:1.6;font-size:var(--fs-base);-webkit-font-smoothing:antialiased;padding:3rem 2rem;padding-top:calc(3rem + 52px)}
+html{background:var(--bg1)}
+body{
+  font-family:system-ui,-apple-system,sans-serif;color:#2c2c2c;
+  background:var(--bg1);line-height:1.6;font-size:clamp(.875rem,1.1vw,1.05rem);
+  -webkit-font-smoothing:antialiased;padding:2rem 1.5rem 0;
+}
+.nav{
+  max-width:1100px;margin:0 auto 2rem;display:flex;align-items:center;gap:1.2rem;
+  font-size:12px;letter-spacing:.06em;border-bottom:1px solid #e0ddd6;padding-bottom:.75rem;
+}
+.nav b{font-weight:500;color:#1a1a1a;flex:1}
+.nav a{color:#999;text-decoration:none;transition:color .2s}
+.nav a:hover,.nav a.active{color:var(--c)}
+.inner{max-width:1100px;margin:0 auto}
+.sec-title{font-size:clamp(1.2rem,2vw,1.6rem);font-weight:300;letter-spacing:.03em;color:#1a1a1a;margin-bottom:.25rem}
+.sec-label{font-size:12px;letter-spacing:.1em;color:var(--c);text-transform:uppercase;margin-bottom:.3rem}
+.sec-desc{color:#888;margin-bottom:2rem;max-width:580px;font-size:.9rem}
 
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;gap:1.5rem;padding:0 2rem;height:52px;background:#fff;border-bottom:1px solid #e8e6e0;font-size:var(--fs-sm);letter-spacing:.06em}
-.nav b{font-weight:400;color:#1a1a1a;flex:1}
-.nav a{color:#888;text-decoration:none;transition:color .2s}
-.nav a:hover{color:var(--c)}
-
-.inner{max-width:1200px;margin:0 auto}
-
-.sec-title{font-size:var(--fs-lg);font-weight:300;letter-spacing:.04em;color:#1a1a1a;margin-bottom:.5rem}
-.sec-desc{color:#777;margin-bottom:2rem;max-width:600px}
-
-/* ═══════ LAYER STACK ═══════ */
-.stack-wrap{
-  position:relative;
-  width:100%;
-  max-width:800px;
-  margin:0 auto 1.5rem;
-  border:1px solid #e8e6e0;
-  border-radius:4px;
-  overflow:hidden;
-  background:var(--bg2);
+/* ═══════ CANVAS ═══════ */
+.canvas-wrap{
+  max-width:800px;margin:0 auto 1rem;
+  border:1px solid #e0ddd6;border-radius:4px;overflow:hidden;background:var(--bg2);
 }
-.stack-main{
-  width:100%;
-  display:block;
-  aspect-ratio:2/1;
-  object-fit:cover;
-  background:var(--bg2);
-  transition:opacity .4s;
+.canvas{
+  position:relative;width:100%;aspect-ratio:1/1;
 }
-.stack-overlay{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  mix-blend-mode:screen;
-  opacity:0;
-  transition:opacity .25s;
-  pointer-events:none;
-}
-.stack-overlay.normal-mode{mix-blend-mode:overlay}
-.stack-overlay.on{opacity:1}
-.stack-label{
-  position:absolute;
-  bottom:.5rem;
-  right:.75rem;
-  font-size:10px;
-  letter-spacing:.08em;
-  color:#fff;
-  text-shadow:0 1px 3px rgba(0,0,0,.6);
-  opacity:0;
-  transition:opacity .25s;
-  pointer-events:none;
-  z-index:2;
-}
-.stack-label.on{opacity:1}
-
-/* ═══════ TOGGLE CONTROLS ═══════ */
-.toggles{
-  display:flex;flex-wrap:wrap;gap:.5rem;
-  margin-bottom:2rem;
-  justify-content:center;
-}
-.toggle-btn{
-  display:inline-flex;align-items:center;gap:.4rem;
-  padding:.5rem .9rem;
-  border:1px solid #e8e6e0;
-  border-radius:4px;
-  font-size:var(--fs-sm);
-  letter-spacing:.04em;
-  color:#666;
-  background:none;
-  cursor:pointer;
-  transition:all .2s;
-  font-family:inherit;
-}
-.toggle-btn:hover{border-color:var(--c25);color:#2c2c2c}
-.toggle-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
-.toggle-btn .dot{width:7px;height:7px;border-radius:50%;background:var(--c);opacity:0;transition:opacity .2s}
-.toggle-btn.active .dot{opacity:1}
-
-/* ═══════ COLLECTION THUMBS ═══════ */
-.col-thumbs{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:.75rem;
-  margin-bottom:2rem;
-}
-.col-thumb{
-  border:1px solid #e8e6e0;
-  border-radius:4px;
-  overflow:hidden;
-  background:var(--bg2);
-  cursor:pointer;
-  transition:border-color .2s;
-  position:relative;
-}
-.col-thumb:hover{border-color:var(--c25)}
-.col-thumb.active{border-color:var(--c);box-shadow:0 0 0 2px var(--c12)}
-.col-thumb img{
-  width:100%;
-  display:block;
-  aspect-ratio:2/1;
+.canvas img{
+  position:absolute;inset:0;width:100%;height:100%;
   object-fit:contain;
-  background:var(--bg2);
 }
-.col-thumb .cl-label{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  padding:.35rem .6rem;
-  background:rgba(247,246,244,.9);
-  border-top:1px solid #e8e6e0;
-  font-size:10px;
-  letter-spacing:.06em;
-  color:#666;
-  text-align:center;
-}
-.col-thumb.active .cl-label{color:var(--c);background:var(--c08)}
+/* backgrounds */
+.canvas .bg{transition:opacity .5s}
+.canvas .bg.hidden{opacity:0;pointer-events:none}
+.canvas .bg.on{opacity:1}
+/* product alpha — always visible */
+.canvas .product{z-index:2}
+/* analysis overlays */
+.canvas .overlay{z-index:3;opacity:0;transition:opacity .3s;pointer-events:none}
+.canvas .overlay.on{opacity:1}
+.canvas .overlay.depth-o{opacity:0;mix-blend-mode:screen}
+.canvas .overlay.depth-o.on{opacity:1}
+.canvas .overlay.normal-o{opacity:0;mix-blend-mode:overlay}
+.canvas .overlay.normal-o.on{opacity:1}
+.canvas .overlay.objects-o{opacity:0;mix-blend-mode:screen}
+.canvas .overlay.objects-o.on{opacity:1}
 
-@media(max-width:768px){
-  .col-thumbs{grid-template-columns:1fr}
+.badge{
+  position:absolute;bottom:.5rem;right:.75rem;z-index:4;
+  font-size:10px;letter-spacing:.08em;color:#fff;
+  text-shadow:0 1px 3px rgba(0,0,0,.6);
+  opacity:0;transition:opacity .3s;pointer-events:none;
 }
+.badge.on{opacity:1}
 
+/* ═══════ CONTROLS ═══════ */
+.controls{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1.5rem}
+.ctrl-group{display:flex;gap:.35rem;align-items:center}
+.ctrl-group .sep{width:1px;height:20px;background:#e0ddd6;margin:0 .5rem}
 
-/* ═══════ GENERATED SCENES ═══════ */
-.gen-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:1.5rem;
-  margin-bottom:3rem;
+.ctrl-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.45rem .75rem;border:1px solid #e0ddd6;border-radius:4px;
+  font-size:11px;letter-spacing:.04em;color:#777;
+  background:none;cursor:pointer;transition:all .2s;font-family:inherit;
 }
-.gen-card{
-  border:1px solid #e8e6e0;
-  border-radius:4px;
-  overflow:hidden;
-  background:var(--bg2);
-  transition:border-color .2s;
-}
-.gen-card:hover{border-color:var(--c25)}
-.gen-card img{
-  width:100%;
-  aspect-ratio:1;
-  object-fit:cover;
-  display:block;
-}
-.gen-card .meta{
-  padding:.75rem 1rem;
-  border-top:1px solid #e8e6e0;
-}
-.gen-card .tag{
-  font-size:10px;
-  color:var(--c);
-  letter-spacing:.12em;
-  text-transform:uppercase;
-}
-.gen-card .prompt{
-  font-size:11px;
-  color:#777;
-  margin-top:.3rem;
-  line-height:1.5;
-}
+.ctrl-btn:hover{border-color:var(--c25);color:#444}
+.ctrl-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
 
-/* ═══════ DOC SECTION ═══════ */
-.doc-row{
-  background:var(--bg2);
-  border:1px solid #e8e6e0;
-  border-radius:4px;
-  padding:1.25rem;
-  margin-bottom:.75rem;
+/* background radio group */
+.bg-controls{display:flex;gap:.5rem;justify-content:center;margin-top:.75rem}
+.bg-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.45rem .75rem;border:1px solid #e0ddd6;border-radius:3px;
+  font-size:11px;letter-spacing:.04em;color:#999;
+  background:none;cursor:pointer;transition:all .2s;font-family:inherit;
 }
-.doc-row h4{
-  font-weight:400;
-  font-size:var(--fs-sm);
-  color:#1a1a1a;
-  margin-bottom:.3rem;
-}
-.doc-row .v{
-  color:#666;
-  font-size:11px;
-  letter-spacing:.06em;
-  line-height:1.6;
-}
-.doc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
+.bg-btn:hover{border-color:var(--c25);color:#555}
+.bg-btn.active{border-color:var(--c);color:var(--c);background:var(--c08)}
+.bg-btn .swatch{width:8px;height:8px;border-radius:50%;background:#ddd}
+.bg-btn.active .swatch{background:var(--c)}
 
-.pipeline{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:.75rem;
-  flex-wrap:wrap;
-  font-size:11px;
-  letter-spacing:.04em;
-  color:#666;
-}
-.step,.pipeline .step{
-  padding:.35rem .7rem;
-  border:1px solid var(--c18);
-  border-radius:4px;
-  color:var(--c);
-  white-space:nowrap;
-}
-.arr,.pipeline .arr{color:#aaa}
+/* ═══════ FLOW ═══════ */
+.flow{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;font-size:10px;letter-spacing:.05em}
+.flow .step{padding:.3rem .55rem;border:1px solid var(--c18);border-radius:3px;color:var(--c);white-space:nowrap}
+.flow .arr{color:#bbb}
 
-.footer{text-align:center;padding:3rem 0;color:#999;font-size:var(--fs-sm);letter-spacing:.08em}
+/* ═══════ DOC ═══════ */
+.doc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin:2rem 0}
+.doc-row{background:var(--bg2);border:1px solid #e0ddd6;border-radius:4px;padding:1rem}
+.doc-row h4{font-weight:500;font-size:11px;color:#1a1a1a;margin-bottom:.25rem}
+.doc-row .v{color:#888;font-size:10px;letter-spacing:.03em;line-height:1.6}
 
-@media(max-width:768px){
-  .gen-grid{grid-template-columns:1fr}
-  .doc-grid{grid-template-columns:1fr}
-}
+.footer{text-align:center;padding:2rem 0;color:#bbb;font-size:11px;letter-spacing:.08em}
+
+@media(max-width:768px){.doc-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="nav">
   <b>HTML TEST SPACE</b>
-  <a href="index.html#icons">Icons</a>
-  <a href="index.html#video">Video</a>
-  <a href="index.html#cursor">Cursor</a>
+  <a href="index.html">Index</a>
+  <a href="pipeline.html">Pipeline</a>
+  <a href="layerbreak.html" class="active">Layer Break</a>
 </nav>
 
 <div class="inner">
 
-<!-- ═══════ HERO ═══════ -->
-<section style="margin-bottom:2.5rem">
+<section style="margin-bottom:1.5rem">
+  <div class="sec-label">Gentle Monster SG</div>
   <div class="sec-title">Layer Break</div>
   <div class="sec-desc">
-    Gentle Monster SG product render decomposed into its technical layers — depth, geometry normals, object-ID masks, and individual Blender collection outputs. Each layer feeds the depth-to-image pipeline to create magazine-grade editorial scenes.
+    Product fixed by alpha channel. Backgrounds swapped independently. Analysis layers toggled on top. All passes share identical camera perspective and sensor fit — pixel-aligned overlay.
   </div>
 </section>
 
-<!-- ═══════ LAYER STACK ═══════ -->
-<section style="margin-bottom:1rem">
-  <div class="sec-title" style="font-size:1rem">Render Decomposition</div>
-  <div class="stack-wrap" id="stack">
-    <img class="stack-main" src="img/layerbreak/render_base.png" alt="Base render" id="hero">
-    <img class="stack-overlay" id="ol-depth" src="img/layerbreak/depth_scene.png" alt="Depth">
-    <img class="stack-overlay normal-mode" id="ol-normals" src="img/layerbreak/normals.png" alt="Normals">
-    <img class="stack-overlay normal-mode" id="ol-objects" src="img/layerbreak/objects.png" alt="Object IDs">
-    <div class="stack-label" id="lb-depth">Depth Map</div>
-    <div class="stack-label" id="lb-normals">Normals</div>
-    <div class="stack-label" id="lb-objects">Object IDs</div>
-  </div>
+<!-- ═══════ CANVAS ═══════ -->
+<div class="canvas-wrap">
+  <div class="canvas" id="canvas">
 
-  <div class="toggles">
-    <button class="toggle-btn" data-overlay="depth">Depth</button>
-    <button class="toggle-btn" data-overlay="normals">Normals</button>
-    <button class="toggle-btn" data-overlay="objects">Object IDs</button>
-  </div>
+    <!-- Backgrounds (z-index 1) -->
+    <img class="bg on" data-bg="jungle" src="img/pipeline/gm_jungle_bg.png" alt="Jungle">
+    <img class="bg hidden" data-bg="space" src="img/pipeline/gm_space_bg.png" alt="Space">
+    <img class="bg hidden" data-bg="fashion" src="img/pipeline/gm_fashion_bg.png" alt="Fashion">
 
-  <div class="col-thumbs">
-    <div class="col-thumb" data-col="layer_collection">
-      <img src="img/layerbreak/layer_collection.png" alt="Collection">
-      <div class="cl-label">Collection — 4000×2000</div>
-    </div>
-    <div class="col-thumb" data-col="layer_felix1">
-      <img src="img/layerbreak/layer_felix1.png" alt="Felix 1">
-      <div class="cl-label">Felix 1 — 4000×2000</div>
-    </div>
-  </div>
+    <!-- Product alpha (z-index 2, always on) -->
+    <img class="product" src="img/pipeline/gentle_monster_alpha.png" alt="Product">
 
-</section>
+    <!-- Analysis overlays (z-index 3, toggleable) -->
+    <img class="overlay depth-o" id="ol-depth" src="img/pipeline/gentle_monster_depth.png" alt="Depth">
+    <img class="overlay normal-o" id="ol-normals" src="img/pipeline/gentle_monster_normal.png" alt="Normals">
+    <img class="overlay objects-o" id="ol-objects" src="img/pipeline/gentle_monster_objects.png" alt="Objects">
 
-<!-- ═══════ FLOW CONNECTOR + GENERATED SCENES ═══════ -->
-<section style="margin-bottom:2rem">
-  <div style="display:flex;align-items:center;gap:.5rem;justify-content:center;margin-bottom:2rem;font-size:11px;letter-spacing:.06em;color:#aaa">
-    <span class="step" style="border-color:var(--c25)">Depth Map</span>
-    <span class="arr">&rarr;</span>
-    <span class="step" style="border-color:var(--c25)">ControlNet Depth SDXL</span>
-    <span class="arr">&rarr;</span>
-    <span class="step" style="border-color:var(--c25)">Editorial Output</span>
+    <!-- Badges -->
+    <div class="badge" id="badge-depth">Depth Map (16-bit Cycles)</div>
+    <div class="badge" id="badge-normals">World-Space Normals</div>
+    <div class="badge" id="badge-objects">Object-ID (21 colors)</div>
   </div>
-  <div class="gen-grid">
-    <div class="gen-card">
-      <img src="img/layerbreak/gen_scifi.png" alt="Sci-fi scene">
-      <div class="meta">
-        <div class="tag">Sci-Fi Editorial</div>
-        <div class="prompt">Holographic displays, chrome surfaces, neon blue &amp; purple ambient lighting, space station interior</div>
-      </div>
-    </div>
-    <div class="gen-card">
-      <img src="img/layerbreak/gen_bubblebath.png" alt="Bubble bath scene">
-      <div class="meta">
-        <div class="tag">Bubble Bath Luxury</div>
-        <div class="prompt">Marble bathroom, iridescent bubbles, candlelight reflections, rose gold fixtures, steam atmosphere</div>
-      </div>
-    </div>
-    <div class="gen-card">
-      <img src="img/layerbreak/gen_jungle.png" alt="Jungle scene">
-      <div class="meta">
-        <div class="tag">Jungle Monster</div>
-        <div class="prompt">Dark jungle, furry creature in shadows, bioluminescent plants, fog, dramatic chiaroscuro lighting</div>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
+
+<!-- ═══════ CONTROLS ═══════ -->
+<div class="controls">
+  <span style="font-size:10px;color:#aaa;letter-spacing:.06em;margin-right:.5rem">Background:</span>
+</div>
+<div class="bg-controls" id="bg-switcher">
+  <button class="bg-btn active" data-bg="jungle"><span class="swatch"></span>Jungle</button>
+  <button class="bg-btn" data-bg="space"><span class="swatch"></span>Space</button>
+  <button class="bg-btn" data-bg="fashion"><span class="swatch"></span>Fashion</button>
+</div>
+
+<div class="controls" style="margin-top:1rem">
+  <span style="font-size:10px;color:#aaa;letter-spacing:.06em;margin-right:.5rem">Analysis overlay:</span>
+  <button class="ctrl-btn" data-overlay="depth">Depth</button>
+  <button class="ctrl-btn" data-overlay="normals">Normals</button>
+  <button class="ctrl-btn" data-overlay="objects">Object IDs</button>
+</div>
+
+<!-- ═══════ PIPELINE ═══════ -->
+<div class="flow">
+  <span class="step">Blender 5.1</span><span class="arr">&rarr;</span>
+  <span class="step">Render Passes</span><span class="arr">&rarr;</span>
+  <span class="step">Cycles Depth</span><span class="arr">&rarr;</span>
+  <span class="step">Pad to Square</span><span class="arr">&rarr;</span>
+  <span class="step">ComfyUI SDXL</span><span class="arr">&rarr;</span>
+  <span class="step">Layer Composite</span>
+</div>
 
 <!-- ═══════ TECHNIQUE ═══════ -->
-<section style="margin-bottom:2rem">
-  <div class="sec-title" style="font-size:1rem">Technique</div>
-  <div class="doc-grid">
-    <div class="doc-row">
-      <h4>Scene</h4>
-      <div class="v">gentle monster.blend — 39 objects, 21 meshes, 8 collections, 3 cameras, 0 lights (emissive materials only). Camera.001 active: 50mm perspective at (3.2, −130, 1.1).</div>
-    </div>
-    <div class="doc-row">
-      <h4>Render Layers</h4>
-      <div class="v">Single View Layer. 8 sub-collections under "all1" root — Collection (6 meshes), Felix 1 (1 sculpt), Felix 2 (1 sculpt + instance), Leoni (5 objects), Instances (volume clouds + smoke), plus "faces" and "grund" (cameras).</div>
-    </div>
+<div class="doc-grid">
+  <div class="doc-row">
+    <h4>Scene</h4>
+    <div class="v">gentle monster.blend &middot; 39 objects, 21 meshes &middot; Camera.001: 50mm perspective &middot; 2:1 ultrawide &middot; FFMPEG movie format</div>
   </div>
   <div class="doc-row">
-    <h4>Depth Map Extraction</h4>
-    <div class="v">Blender 5.1 compositor: Z-Pass → Normalize node → Invert → FileOutput (OPEN_EXR_MULTILAYER). EXR converted to 16-bit PNG via OpenEXR + Pillow. Scene had FFMPEG animation format — output bypassed via FileOutput compositor node (scene-level format override not possible in Blender 5.1).</div>
+    <h4>Analysis Passes</h4>
+    <div class="v">EEVEE &middot; Alpha beauty (transparent bg) + Object-ID (21 emission colors, seed 42) + World-space normals (XYZ&rarr;RGB) &middot; All 2048&times;1024 &middot; sensor_fit HORIZONTAL</div>
   </div>
   <div class="doc-row">
-    <h4>Full Pipeline</h4>
-    <div class="v">Blender 5.1 · Cycles 128 samples → Z-Pass → Normalize → Invert → FileOutput (EXR) → OpenEXR+Pillow → 16-bit PNG → ComfyUI /upload/image → ControlNet Depth SDXL · 0.85 → KSampler (dpmpp_2m, karras, CFG 7.0, 25 steps) → 1024×1024 latent output. MPS generation: ~2.5 min each. 2:1 depth map mapped to SDXL square latent space by ControlNet internally.</div>
-  </div>
-  <div class="doc-grid">
-    <div class="doc-row">
-      <h4>Object-ID Pass</h4>
-      <div class="v">All 21 meshes replaced with random-color Emission shaders (seed 42). EEVEE render at 512×256 (2:1). Each surface gets a unique RGB ID — useful for per-object masking in compositing or segmentation.</div>
-    </div>
-    <div class="doc-row">
-      <h4>Normal Map Pass</h4>
-      <div class="v">World-space normals remapped via Vector Math (MULTIPLY_ADD: ×0.5 + 0.5) — encoding XYZ ∈ [−1,1] as RGB ∈ [0,1]. EEVEE at 512×256 (2:1). Emission shader bypasses lighting. Useful for relighting passes.</div>
-    </div>
+    <h4>Depth Map</h4>
+    <div class="v">Cycles 5 samples &middot; Compositor: Z-Pass &rarr; Normalize &rarr; Invert &rarr; FileOutput EXR &rarr; OpenEXR+Pillow &rarr; 16-bit PNG &middot; 2048&times;1024</div>
   </div>
   <div class="doc-row">
-    <h4>Collection Isolation</h4>
-    <div class="v">Each Blender collection rendered individually by disabling all others via <code>view_layer.layer_collection.children[].exclude = True</code>. Full depth pipeline (compositor setup, 64 samples Cycles) applied to each. Empty collections (Collection 2, Collection 5) produce minimal depth output.</div>
+    <h4>SDXL Generation</h4>
+    <div class="v">Depth padded to 2048&times;2048 &middot; ControlNet Depth SDXL 0.85 &middot; dpmpp_2m karras &middot; CFG 7.0 &middot; 20 steps &middot; 1024&times;1024 output &middot; MPS ~3 min</div>
   </div>
-</section>
+  <div class="doc-row">
+    <h4>Overlay Compatibility</h4>
+    <div class="v">All passes: identical resolution, camera, sensor_fit (HORIZONTAL). Depth padded to square for SDXL — scene occupies center strip. Product alpha keeps foreground fixed while backgrounds swap.</div>
+  </div>
+  <div class="doc-row">
+    <h4>Layer Stack</h4>
+    <div class="v">z1: SDXL background (square, swappable) &middot; z2: Beauty alpha (product &mdash; always visible) &middot; z3: Analysis overlays (depth screen, normals overlay, objects screen &mdash; toggleable)</div>
+  </div>
+</div>
 
-<!-- ═══════ SPECS ═══════ -->
-<section style="margin-bottom:2rem">
-  <div class="sec-title" style="font-size:1rem">Generation Specs</div>
-  <div class="doc-grid">
-    <div class="doc-row">
-      <h4>Sci-Fi</h4>
-      <div class="v">strength: 0.85 · steps: 25 · CFG: 7.0<br>sampler: dpmpp_2m · scheduler: karras</div>
-    </div>
-    <div class="doc-row">
-      <h4>Bubble Bath</h4>
-      <div class="v">strength: 0.85 · steps: 25 · CFG: 7.0<br>sampler: dpmpp_2m · scheduler: karras</div>
-    </div>
-    <div class="doc-row">
-      <h4>Jungle Monster</h4>
-      <div class="v">strength: 0.90 · steps: 30 · CFG: 7.0<br>sampler: dpmpp_2m · scheduler: karras</div>
-    </div>
-    <div class="doc-row">
-      <h4>Hardware</h4>
-      <div class="v">Apple Silicon MPS · 32 GB RAM<br>SDXL Base 1.0 (6.5 GB) + ControlNet Depth SDXL (2.3 GB)</div>
-    </div>
-  </div>
-</section>
+<div class="footer">Layer Break &middot; Gentle Monster SG &middot; html-test-space</div>
 
-<!-- ═══════ FOOTER ═══════ -->
-<div class="footer">Gentle Monster SG · Layer Decomposition · html-test-space</div>
 </div>
 
 <script>
-const hero = document.getElementById('hero');
-const overlays = {};
-document.querySelectorAll('.stack-overlay').forEach(el => overlays[el.id.replace('ol-','')] = el);
-const labels = {};
-document.querySelectorAll('.stack-label').forEach(el => labels[el.id.replace('lb-','')] = el);
+// Background switcher
+const bgs=document.querySelectorAll('#canvas .bg');
+const bgBtns=document.querySelectorAll('#bg-switcher .bg-btn');
 
-// Overlay toggles — multiple can be active
-document.querySelectorAll('.toggle-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const key = btn.dataset.overlay;
-    btn.classList.toggle('active');
-    overlays[key].classList.toggle('on');
-    labels[key].classList.toggle('on');
+bgBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const key=btn.dataset.bg;
+    bgBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    bgs.forEach(bg=>{
+      if(bg.dataset.bg===key){bg.classList.remove('hidden');bg.classList.add('on')}
+      else{bg.classList.add('hidden');bg.classList.remove('on')}
+    });
   });
 });
 
-// Collection thumbs — swap the hero image
-document.querySelectorAll('.col-thumb').forEach(th => {
-  th.addEventListener('click', () => {
-    document.querySelectorAll('.col-thumb').forEach(t => t.classList.remove('active'));
-    th.classList.add('active');
-    hero.src = `img/layerbreak/${th.dataset.col}.png`;
+// Analysis overlay toggles
+const overlays={},badges={};
+document.querySelectorAll('.overlay').forEach(el=>{
+  overlays[el.id.replace('ol-','')]=el;
+});
+document.querySelectorAll('.badge').forEach(el=>{
+  badges[el.id.replace('badge-','')]=el;
+});
+
+document.querySelectorAll('.ctrl-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const key=btn.dataset.overlay;
+    const el=overlays[key];
+    const badge=badges[key];
+    btn.classList.toggle('active');
+    if(el) el.classList.toggle('on');
+    if(badge) badge.classList.toggle('on');
   });
 });
 </script>
